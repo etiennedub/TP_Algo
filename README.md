@@ -1,3 +1,3 @@
 # TP_Algo
 
-Besoin d'ajouter du dossier RTC dand TP1
+Besoin d'ajouter le dossier RTC dans TP1

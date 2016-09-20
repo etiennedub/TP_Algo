@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <ctime>
 
 /*!
  * \brief Cette fonction permet de séparer une chaine de caractère en un vecteur de chaines de caractère séparés par un délimiteur
@@ -45,6 +46,7 @@ public:
 	bool operator< (const Date & other) const;
 	bool operator> (const Date & other) const;
 	friend std::ostream & operator<<(std::ostream & flux, const Date & p_date);
+	bool valideDate (unsigned int an, unsigned int mois, unsigned int jour) const;
 
 private:
 	unsigned int m_an;
@@ -62,7 +64,7 @@ class Heure {
 public:
 	Heure();
 	Heure(unsigned int heure, unsigned int min, unsigned int sec);
-	Heure add_secondes(unsigned int secs) const;
+	Heure add_secondes(unsigned int secs);
 	bool operator== (const Heure & other) const;
 	bool operator< (const Heure & other) const;
 	bool operator> (const Heure & other) const;

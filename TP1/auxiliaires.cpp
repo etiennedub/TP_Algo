@@ -170,6 +170,10 @@ void lireFichier(std::string nomFichier,
 		return(resultat);
 	}
 
+	std::ostream & operator<<(std::ostream & flux, const Heure & p_heure){
+		flux << p_heure.m_heure << ":" << p_heure.m_min << ":" << p_heure.m_sec;
+		return flux;
+	}
 
 	Date::Date(){
 		time_t now = time(0);
@@ -248,6 +252,6 @@ void lireFichier(std::string nomFichier,
 		}
 	}
 	std::ostream & operator<<(std::ostream & flux, const Date & p_date){
-		flux << p_date.m_an << "/" << p_date.m_mois << "/" << p_date.m_jour;
+		flux << p_date.m_an << "-" << p_date.m_mois << "-" << p_date.m_jour;
 		return flux;
 	}

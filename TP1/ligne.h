@@ -42,14 +42,14 @@ public:
 	static std::string categorieToString(CategorieBus c);
 	CategorieBus getCategorie() const;
 	void setCategorie(CategorieBus categorie);
-	std::pair<std::string, std::string> getDestinations() const;
+	std::pair<std::string, std::string> getDestinations() const; // A faire !!!!!
 	unsigned int getId() const;
 	void setId(unsigned int id);
 	const std::string& getNumero() const;
 	void setNumero(const std::string& numero);
 	const std::vector<Voyage*>& getVoyages() const;
 	void setVoyages(const std::vector<Voyage*>& voyages);
-	void addVoyage(Voyage* ptr_voyage);
+	void addVoyage(Voyage* ptr_voyage);                      // A faire !!!!!
 	const std::string& getDescription() const;
 	void setDescription(const std::string& description);
 	friend std::ostream& operator <<(std::ostream& f, const Ligne& p_ligne);

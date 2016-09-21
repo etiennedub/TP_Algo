@@ -5,37 +5,37 @@
  *      Author: etudiant
  */
 #include "auxiliaires.h"
+#include "ligne.h"
 #include <iostream>
 #include <ctime>
 
-
+void testLigne();
 int main(){
-	Heure test;
-	Heure test2;
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
-
-	int testHeure = ltm->tm_hour;
-	std::cout << test - test2 << "\n";
-	if (test == test2){
-		std::cout << "true" << "\n";
-	}
-	else{
-		std::cout << "false" << "\n";
-	}
-	Date testDate(1999,1,1);
-	std::cout << testDate;
-	Date testDate2(1998,2,31);
+	testLigne();
 }
 
 
-void testLireFichier(){
-	std::string file_p = "RTC/stops.txt";
+std::vector<std::vector<std::string>> lireFichier(std::string path){
+	std::string file_p = path;
 	std::vector<std::vector<std::string>> resultats;
 	lireFichier(file_p, resultats, ',' , true);
-	for (int i = 0; i < resultats.size(); i++){
-		for (int j = 0; j < resultats[i].size(); j++){
-			std::cout << resultats[i][j] << "\n";
-		}
+	return resultats;
+}
+
+void testLigne(){
+	std::vector<std::vector<std::string>> file;
+	file = lireFichier("RTC/routes.txt");
+	std::vector<Ligne> ligneVec;
+	std::cout << "Ceci est un test \n";
+	for (int i = 0; i < file.size(); i++){
+		Ligne object(file[i]);
+		std::cout << object << "\n";
+
 	}
+/*
+	std::cout << "Ceci est un test \n";
+	for (int i = 0; i < ligneVec.size(); i++){
+		std::cout << ligneVec[i] << "\n";
+	}
+*/
 }

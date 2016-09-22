@@ -6,10 +6,12 @@
 #define RTC_VOYAGE_H
 
 #include <string>
+#include <algorithm>
 #include "arret.h"
 #include "ligne.h"
 #include "station.h"
 #include "auxiliaires.h"
+
 
 class Ligne;
 class Station;
@@ -23,7 +25,7 @@ class Voyage {
 
 public:
 	Voyage(const std::vector<std::string>& ligne_gtfs, Ligne* p_ligne);
-	Arret & arretDeLaStation(unsigned int p_num_station);
+	Arret & arretDeLaStation(unsigned int p_num_station); // A FAIRE !!!!!
 	std::vector<Arret> getArrets() const;
 	const std::string& getDestination() const;
 	void setDestination(const std::string& p_destination);
@@ -38,7 +40,7 @@ public:
 	void setArrets(std::vector<Arret>& resultat);
 	bool operator< (const Voyage & p_other) const;
 	bool operator> (const Voyage & p_other) const;
-	friend std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage);
+	friend std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage); // A FAAIRE !!!
 
 private:
 	std::string m_id;

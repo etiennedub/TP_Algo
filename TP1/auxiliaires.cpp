@@ -99,7 +99,26 @@ void lireFichier(std::string nomFichier,
 		return(m_heure == other.m_heure and m_min == other.m_min
 				and m_sec == other.m_sec);
 	}
-
+	bool Heure::operator< (const Heure & other) const{
+		bool resultat;
+				if (m_heure < other.m_heure){
+					resultat = true;
+				}
+				else{
+					if (m_min < other.m_min){
+						resultat = true;
+					}
+					else{
+						if (m_sec < other.m_sec){
+							resultat = true;
+						}
+						else{
+							resultat = false;
+						}
+					}
+				}
+				return resultat;
+	}
 	bool Heure::operator> (const Heure & other) const{
 		bool resultat;
 		if (m_heure > other.m_heure){

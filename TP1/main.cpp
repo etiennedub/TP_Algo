@@ -24,11 +24,11 @@ std::vector<std::vector<std::string>> lireFichier(std::string path){
 
 void testLigne(){
 	std::vector<std::vector<std::string>> file;
-	file = lireFichier("RTC/routes.txt");
-	std::vector<Ligne> ligneVec;
+	file = lireFichier("RTC/stops.txt");
+	std::vector<Station> ligneVec;
 	std::cout << "Ceci est un test \n";
 	for (int i = 0; i < file.size(); i++){
-		Ligne object(file[i]);
+		Station object(file[i]);
 		std::cout << object << "\n";
 
 	}

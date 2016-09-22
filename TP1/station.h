@@ -32,7 +32,7 @@ private:
 
 public:
     Station(const std::vector<std::string>& ligne_gtfs);
-    friend std::ostream& operator<<(std::ostream& flux, const Station& p_station); // A FAIRE !!!!
+    friend std::ostream& operator<<(std::ostream& flux, const Station& p_station);
 	const Coordonnees& getCoords() const;
 	void setCoords(const Coordonnees& coords);
 	const std::string& getDescription() const;

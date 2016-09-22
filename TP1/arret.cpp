@@ -56,5 +56,5 @@ bool Arret::operator> (const Arret & p_other) const{
 	return( m_numero_sequence > p_other.m_numero_sequence);
 }
 std::ostream & operator<<(std::ostream & flux, const Arret & p_arret){
-	// A faire
+	flux << p
 }

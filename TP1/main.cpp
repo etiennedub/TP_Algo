@@ -9,9 +9,9 @@
 #include <iostream>
 #include <ctime>
 
-void testLigne();
+void testvoyage();
 int main(){
-	testLigne();
+	testvoyage();
 }
 
 
@@ -22,16 +22,25 @@ std::vector<std::vector<std::string>> lireFichier(std::string path){
 	return resultats;
 }
 
-void testLigne(){
+void testVoyage(){
 	std::vector<std::vector<std::string>> file;
-	file = lireFichier("RTC/stops.txt");
-	std::vector<Station> ligneVec;
-	std::cout << "Ceci est un test \n";
-	for (int i = 0; i < file.size(); i++){
-		Station object(file[i]);
-		std::cout << object << "\n";
+	file = lireFichier("RTC/routes.txt");
+	Ligne ligneObj(file[0]);
+	std::cout << ligneObj << std::endl;
 
+	file = lireFichier("RTC/trips.txt");
+	Voyage voyageObj(file[75], ligneObj);
+
+	file = lireFichier("RTC/stop_times.txt");
+	std::vector<Arret> arretVec;
+	for (int i = 0; i < 10; i++){
+		Arret arretObj(file[i]);
+		arretVec.push_back(arretObj);
 	}
+
+	voyageObj.setArrets(arretVec);
+
+	std::cout << voyageObj;
 /*
 	std::cout << "Ceci est un test \n";
 	for (int i = 0; i < ligneVec.size(); i++){

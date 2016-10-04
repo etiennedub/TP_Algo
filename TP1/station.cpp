@@ -51,10 +51,15 @@ double Station::distance(const Station& p_station) const{
 	return (m_coords - p_station.m_coords);
 }
 
-//std::vector<Ligne*> Station::getLignesPassantes() const{
-	//std::vector<Ligne> = Resultats*;
 
-//}
+std::vector<Ligne*> Station::getLignesPassantes() const{
+	std::vector<Ligne*> resultats;
+	for(int i = 0; i < m_voyages_passants.size(); i++){
+		resultats.push_back(m_voyages_passants[i]->getLigne());
+	}
+	return resultats;
+}
+
 
 std::ostream& operator<<(std::ostream& flux, const Station& p_station){
 	flux << p_station.m_id << " - " << p_station.m_description;

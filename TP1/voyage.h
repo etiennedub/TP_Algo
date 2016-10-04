@@ -40,7 +40,7 @@ public:
 	void setArrets(std::vector<Arret>& resultat);
 	bool operator< (const Voyage & p_other) const;
 	bool operator> (const Voyage & p_other) const;
-	friend std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage); // A FAAIRE !!!
+	friend std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage);
 
 private:
 	std::string m_id;

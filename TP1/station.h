@@ -37,7 +37,7 @@ public:
 	void setCoords(const Coordonnees& coords);
 	const std::string& getDescription() const;
 	void setDescription(const std::string& description);
-	std::vector<Ligne*> getLignesPassantes() const; // A FAIRE !!!!
+	std::vector<Ligne*> getLignesPassantes() const;
 	const std::string& getNom() const;
 	void setNom(const std::string& nom);
 	unsigned int getId() const;

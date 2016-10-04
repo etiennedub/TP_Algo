@@ -49,7 +49,7 @@ public:
 	void setNumero(const std::string& numero);
 	const std::vector<Voyage*>& getVoyages() const;
 	void setVoyages(const std::vector<Voyage*>& voyages);
-	void addVoyage(Voyage* ptr_voyage);                      // A faire !!!!!
+	void addVoyage(Voyage* ptr_voyage);
 	const std::string& getDescription() const;
 	void setDescription(const std::string& description);
 	friend std::ostream& operator <<(std::ostream& f, const Ligne& p_ligne);

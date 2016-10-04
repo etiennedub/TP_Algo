@@ -72,5 +72,5 @@ bool Voyage::operator> (const Voyage & p_other) const{
 	return(this->getHeureDepart() > p_other.getHeureDepart());
 }
 std::ostream & operator<<(std::ostream & flux, const Arret & p_voyage){
-	flux << p_voyage.m_heure_depart << " - " << p_voyage.m_station_id;
+	flux << p_voyage.m_voyage_id << " - " << p_voyage.m_heure_arrivee;
 }

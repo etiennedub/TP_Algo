@@ -84,10 +84,10 @@ void Ligne::addVoyage(Voyage* ptr_voyage){
 	m_voyages.push_back(ptr_voyage);
 }
 
-std::pair<std::string, std::string> getDestinations() const{
+/*std::pair<std::string, std::string> getDestinations() const{
 	return std::pair<std::string, std::string> (); // à compléter !!!!
 }
-
+*/
 std::ostream& operator <<(std::ostream& f, const Ligne& p_ligne){
 	f << p_ligne.categorieToString(p_ligne.m_categorie) << " " << p_ligne.m_numero << " : "
 			<< p_ligne.m_description;

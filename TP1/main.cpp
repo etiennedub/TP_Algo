@@ -26,12 +26,7 @@ void testVoyage(){
 	std::vector<std::vector<std::string>> file;
 	file = lireFichier("RTC/routes.txt");
 	Ligne ligneObj(file[0]);
-	std::cout << " " << ligneObj << std::endl;
 
-	file = lireFichier("RTC/trips.txt");
-	std::vector<std::string> test = file[75];
-	std::cout << test[3];
-	Voyage voyageObj(test, &ligneObj);
 
 	file = lireFichier("RTC/stop_times.txt");
 	std::vector<Arret> arretVec;
@@ -39,6 +34,10 @@ void testVoyage(){
 		Arret arretObj(file[i]);
 		arretVec.push_back(arretObj);
 	}
+
+	file = lireFichier("RTC/trips.txt");
+	std::vector<std::string> test = file[75];
+	Voyage voyageObj(test, &ligneObj);
 
 	voyageObj.setArrets(arretVec);
 

@@ -10,9 +10,9 @@
 Voyage::Voyage(const std::vector<std::string>& ligne_gtfs, Ligne* p_ligne){
 	m_id = ligne_gtfs[0];
 	m_ligne = p_ligne;
-	std::string m_service_id = ligne_gtfs[1];
-	std::string m_destination = ligne_gtfs[3];
-	std::vector<Arret> m_arrets = {};
+	m_service_id = ligne_gtfs[1];
+	m_destination = ligne_gtfs[3];
+	m_arrets = {};
 }
 
 

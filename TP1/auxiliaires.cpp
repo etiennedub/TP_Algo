@@ -191,7 +191,18 @@ void lireFichier(std::string nomFichier,
 	}
 
 	std::ostream & operator<<(std::ostream & flux, const Heure & p_heure){
-		flux << p_heure.m_heure << ":" << p_heure.m_min << ":" << p_heure.m_sec;
+		if (p_heure.m_heure < 10){
+			flux << "0";
+		}
+		flux << p_heure.m_heure << ":";
+		if (p_heure.m_min < 10){
+			flux << "0";
+		}
+		flux << p_heure.m_min << ":";
+		if (p_heure.m_sec < 10){
+				flux << "0";
+		}
+		flux << p_heure.m_sec;
 		return flux;
 	}
 

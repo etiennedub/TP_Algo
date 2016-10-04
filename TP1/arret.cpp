@@ -9,9 +9,9 @@
 Arret::Arret(const std::vector<std::string>& ligne_gtfs){
 	m_station_id = std::stoi(ligne_gtfs[3]);
 	std::vector<std::string> heureTempo = split(ligne_gtfs[1],':');
-	Heure m_heure_arrivee(std::stoi(heureTempo[0]), std::stoi(heureTempo[1]), std::stoi(heureTempo[2]));
+	m_heure_arrivee = Heure(std::stoi(heureTempo[0]), std::stoi(heureTempo[1]), std::stoi(heureTempo[2]));
 	heureTempo = split(ligne_gtfs[2],':');
-	Heure m_heure_depart(std::stoi(heureTempo[0]), std::stoi(heureTempo[1]),
+	m_heure_depart = Heure(std::stoi(heureTempo[0]), std::stoi(heureTempo[1]),
 			std::stoi(heureTempo[2]));
 	m_numero_sequence = std::stoi(ligne_gtfs[4]);;
 	m_voyage_id = ligne_gtfs[0];

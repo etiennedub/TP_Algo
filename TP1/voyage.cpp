@@ -71,6 +71,9 @@ bool Voyage::operator< (const Voyage & p_other) const{
 bool Voyage::operator> (const Voyage & p_other) const{
 	return(this->getHeureDepart() > p_other.getHeureDepart());
 }
-std::ostream & operator<<(std::ostream & flux, const Arret & p_voyage){
-	flux << p_voyage.m_heure_depart << " - " << p_voyage.m_station_id;
+std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage){
+	flux << p_voyage.getLigne()->getNumero();
+	for( int i = 0; i < p_voyage.getArrets().size(); i++){
+		flux << p_voyage.getArrets()[i];
+	}
 }

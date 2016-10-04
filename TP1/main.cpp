@@ -9,9 +9,12 @@
 #include <iostream>
 #include <ctime>
 
-void testvoyage();
+
+
+void testVoyage();
+
 int main(){
-	testvoyage();
+	testVoyage();
 }
 
 
@@ -26,10 +29,12 @@ void testVoyage(){
 	std::vector<std::vector<std::string>> file;
 	file = lireFichier("RTC/routes.txt");
 	Ligne ligneObj(file[0]);
-	std::cout << ligneObj << std::endl;
+	std::cout << " " << ligneObj << std::endl;
 
 	file = lireFichier("RTC/trips.txt");
-	Voyage voyageObj(file[75], ligneObj);
+	std::vector<std::string> test = file[75];
+	std::cout << test[3];
+	Voyage voyageObj(test, &ligneObj);
 
 	file = lireFichier("RTC/stop_times.txt");
 	std::vector<Arret> arretVec;

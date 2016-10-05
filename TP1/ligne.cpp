@@ -93,6 +93,7 @@ std::pair<std::string, std::string> Ligne::getDestinations() const{
 	catch(const std::out_of_range& e){
 		return std::pair<std::string, std::string> (resultat[0],"");
 	}
+
 }
 
 std::ostream& operator <<(std::ostream& f, const Ligne& p_ligne){

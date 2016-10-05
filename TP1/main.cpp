@@ -79,7 +79,7 @@ int main(){
 			<< ligneOrdre.size() << std::endl << ligneTexte;
 	for ( std::map <std::string, Ligne*>::iterator it = ligneOrdre.begin(); it != ligneOrdre.end(); ++it ){
 		textAEcrire << (*it->second) << std::endl;
-	}
+
 	textAEcrire << ligneTexte << "STATIONS DE LA RTC" << std::endl << "COMPTE = "
 				<< mapStation.size() << std::endl << ligneTexte;
 	for ( std::map <unsigned int, Station>::iterator it = mapStation.begin(); it != mapStation.end(); ++it ){

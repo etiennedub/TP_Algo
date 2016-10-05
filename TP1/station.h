@@ -24,27 +24,29 @@ class Coordonnees;
 class Station {
 
 private:
-    unsigned int m_id;
-    std::string m_nom;
-    std::string m_description;
-    Coordonnees m_coords;
-    std::vector<Voyage* > m_voyages_passants;
+    unsigned int m_id;// parametre m_id
+    std::string m_nom;// parametre m_nom
+    std::string m_description;// parametre m_description
+    Coordonnees m_coords;// parametre m_coordonees
+    std::vector<Voyage* > m_voyages_passants;// initialisation d'un vecteur
 
 public:
+    //constructeur de la classe Station
+ 	//param un vecteur : ligne d'information présente dans stop.txt
     Station(const std::vector<std::string>& ligne_gtfs);
     friend std::ostream& operator<<(std::ostream& flux, const Station& p_station);
-	const Coordonnees& getCoords() const;
-	void setCoords(const Coordonnees& coords);
-	const std::string& getDescription() const;
-	void setDescription(const std::string& description);
+	const Coordonnees& getCoords() const; //méthode qui permet de récupérer les coordonnées
+	void setCoords(const Coordonnees& coords);//méthode qui permet de fixer les coordonnées
+	const std::string& getDescription() const;//méthode qui permet de récupérer les descriptions
+	void setDescription(const std::string& description);//méthode qui permet de fixer la description
 	std::vector<Ligne*> getLignesPassantes() const;
-	const std::string& getNom() const;
-	void setNom(const std::string& nom);
-	unsigned int getId() const;
-	void setId(unsigned int stationId);
-	const std::vector<Voyage*> & getVoyagesPassants() const;
-	void addVoyage(Voyage* ptr_voyage);
-	double distance(const Station& p_station) const;
+	const std::string& getNom() const;//méthode qui permet de récupérer le nom
+	void setNom(const std::string& nom);//méthode qui permet de fixer le nom
+	unsigned int getId() const;//méthode qui permet de récupérer l'identifiant
+	void setId(unsigned int stationId);//méthode qui permet de fixer l'identifiant
+	const std::vector<Voyage*> & getVoyagesPassants() const; // méthode qui retourne m_voyages_passants
+	void addVoyage(Voyage* ptr_voyage); //méthode qui permet de remplir un vecteur (m_voyaged_passants)
+	double distance(const Station& p_station) const;// fonction qui retourne la distance entre deux coordonnees
 };
 
 

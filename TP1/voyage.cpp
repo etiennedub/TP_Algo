@@ -10,9 +10,9 @@
 Voyage::Voyage(const std::vector<std::string>& ligne_gtfs, Ligne* p_ligne){
 	m_id = ligne_gtfs[0];
 	m_ligne = p_ligne;
-	std::string m_service_id = ligne_gtfs[1];
-	std::string m_destination = ligne_gtfs[3];
-	std::vector<Arret> m_arrets = {};
+	m_service_id = ligne_gtfs[1];
+	m_destination = ligne_gtfs[3].substr(1, ligne_gtfs[3].size() -2);
+	m_arrets = {};
 }
 
 
@@ -44,7 +44,7 @@ void Voyage::setServiceId(std::string p_service_id){
 	m_service_id = p_service_id;
  }
 Heure Voyage::getHeureDepart() const{
-	if(m_arrets.size() < 0){
+	if(m_arrets.size() > 0){
 		return m_arrets[0].getHeureDepart();
 	}
 	else {
@@ -52,7 +52,7 @@ Heure Voyage::getHeureDepart() const{
 	}
  }
 Heure Voyage::getHeureFin() const{
-	if(m_arrets.size() < 0){
+	if(m_arrets.size() > 0){
 			return m_arrets[-1].getHeureArrivee();
 		}
 		else {

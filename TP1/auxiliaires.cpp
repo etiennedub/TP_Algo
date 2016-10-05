@@ -102,85 +102,54 @@ void lireFichier(std::string nomFichier,
 	}
 
 	bool Heure::operator> (const Heure & other) const{
-		bool resultat;
+		bool resultat = false;
 		if (m_heure > other.m_heure){
 			resultat = true;
 		}
-		else{
+		else if(m_heure == other.m_heure){
 			if (m_min > other.m_min){
 				resultat = true;
 			}
-			else{
+			else if(m_min == other.m_min){
 				if (m_sec > other.m_sec){
 					resultat = true;
 				}
-				else{
-					resultat = false;
 				}
-			}
 		}
 		return resultat;
 	}
+
 	bool Heure::operator< (const Heure & other) const{
-		bool resultat;
+		bool resultat = false;
 		if (m_heure < other.m_heure){
 			resultat = true;
 		}
-		else{
+		else if(m_heure == other.m_heure){
 			if (m_min < other.m_min){
 				resultat = true;
 			}
-			else{
+			else if(m_min == other.m_min){
 				if (m_sec < other.m_sec){
 					resultat = true;
 				}
-				else{
-					resultat = false;
 				}
-			}
 		}
 		return resultat;
 	}
 	bool Heure::operator<= (const Heure & other) const{
-		bool resultat;
+		bool resultat = false;
 		if (m_heure <= other.m_heure){
 			resultat = true;
 		}
-		else{
-			if (m_min <= other.m_min){
-				resultat = true;
-			}
-			else{
-				if (m_sec <= other.m_sec){
-					resultat = true;
-				}
-				else{
-					resultat = false;
-				}
-			}
-		}
-		return(resultat);
+		return resultat;
 	}
 
 	bool Heure::operator>= (const Heure & other) const{
-		bool resultat;
+		bool resultat = false;
 		if (m_heure >= other.m_heure){
 			resultat = true;
 		}
-		else{
-			if (m_min >= other.m_min){
-				resultat = true;
-			}
-			else{
-				if (m_sec >= other.m_sec){
-					resultat = true;
-				}
-				else{
-					resultat = false;
-				}
-			}
-		}
-		return(resultat);
+		return resultat;
 	}
 
 	int Heure::operator- (const Heure & other) const{
@@ -191,7 +160,18 @@ void lireFichier(std::string nomFichier,
 	}
 
 	std::ostream & operator<<(std::ostream & flux, const Heure & p_heure){
-		flux << p_heure.m_heure << ":" << p_heure.m_min << ":" << p_heure.m_sec;
+		if (p_heure.m_heure < 10){
+			flux << "0";
+		}
+		flux << p_heure.m_heure << ":";
+		if (p_heure.m_min < 10){
+			flux << "0";
+		}
+		flux << p_heure.m_min << ":";
+		if (p_heure.m_sec < 10){
+				flux << "0";
+		}
+		flux << p_heure.m_sec;
 		return flux;
 	}
 
@@ -272,6 +252,15 @@ void lireFichier(std::string nomFichier,
 		}
 	}
 	std::ostream & operator<<(std::ostream & flux, const Date & p_date){
-		flux << p_date.m_an << "-" << p_date.m_mois << "-" << p_date.m_jour;
+		flux << p_date.m_an << "-";
+		if (p_date.m_mois < 10){
+			flux << "0";
+		}
+		flux <<  p_date.m_mois << "-";
+		if(p_date.m_jour < 10){
+			flux << "0";
+		}
+		flux << p_date.m_jour;
 		return flux;
 	}
+

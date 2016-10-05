@@ -30,28 +30,28 @@ class Voyage;
 class Ligne {
 
 private:
-    unsigned int m_id;
-    std::string m_numero;
-    std::string m_description;
-    CategorieBus m_categorie;
-    std::vector<Voyage*> m_voyages;
+    unsigned int m_id;// parametre m_id
+    std::string m_numero;//paramètre m_numéto
+    std::string m_description;// parametre m_description
+    CategorieBus m_categorie;//paramètre m_catégorie
+    std::vector<Voyage*> m_voyages;//vecteur m_voyages
 
 public:
 	Ligne(const std::vector<std::string>& ligne_gtfs);
 	static CategorieBus couleurToCategorie(std::string couleur);
 	static std::string categorieToString(CategorieBus c);
-	CategorieBus getCategorie() const;
-	void setCategorie(CategorieBus categorie);
-	std::pair<std::string, std::string> getDestinations() const; // A faire !!!!!
-	unsigned int getId() const;
-	void setId(unsigned int id);
-	const std::string& getNumero() const;
-	void setNumero(const std::string& numero);
+	CategorieBus getCategorie() const;//méthode qui permet de récupérer la catégorie du bus
+	void setCategorie(CategorieBus categorie);//méthode qui permet de fixer la catégorie
+	std::pair<std::string, std::string> getDestinations() const; //méthode qui permet de récupérer la destination
+	unsigned int getId() const;//méthode qui permet de récupérer l'identifiant
+	void setId(unsigned int id);//méthode qui permet de fixer l'identifiant
+	const std::string& getNumero() const;//méthode qui permet de récupérer le numéro
+	void setNumero(const std::string& numero);//méthode qui permet de fixer le numéro
 	const std::vector<Voyage*>& getVoyages() const;
-	void setVoyages(const std::vector<Voyage*>& voyages);
-	void addVoyage(Voyage* ptr_voyage);
-	const std::string& getDescription() const;
-	void setDescription(const std::string& description);
+	void setVoyages(const std::vector<Voyage*>& voyages);//méthode qui permet de fixer m_voyages
+	void addVoyage(Voyage* ptr_voyage);//méthode qui permet de remplir un vecteur (m_voyages)
+	const std::string& getDescription() const;//méthode qui permet de récupérer la description
+	void setDescription(const std::string& description);//méthode qui permet de fixer la description
 	friend std::ostream& operator <<(std::ostream& f, const Ligne& p_ligne);
 };
 

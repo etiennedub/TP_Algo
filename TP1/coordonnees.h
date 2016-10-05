@@ -17,26 +17,26 @@
 class Coordonnees {
 
 public:
-
+	//constructeur de la clase coordonnees
     Coordonnees(double latitude, double longitude);
 
-    double getLatitude() const ;
+    double getLatitude() const ;//méthode qui permet de récupérer la latitude
 
-    void setLatitude(double latitude) ;
+    void setLatitude(double latitude) ;//méthode qui permet de fixer la latitude
 
-    double getLongitude() const ;
+    double getLongitude() const ;//méthode qui permet de récupérer la longitude
 
-    void setLongitude(double longitude) ;
+    void setLongitude(double longitude) ;//méthode qui permet de fixer la longitude
 
-    static bool is_valide_coord(double p_latitude, double p_longitude) ;
+    static bool is_valide_coord(double p_latitude, double p_longitude) ;//fonction qui valide les coordonnées
 
     double operator- (const Coordonnees & other) const;
 
-    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord);
+    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord); //fonction qui affiche les coordonnees
 
 private:
-    double m_latitude;
-    double m_longitude;
+    double m_latitude;//param de la latitude
+    double m_longitude;//param de la longétude
 };
 
 

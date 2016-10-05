@@ -85,6 +85,7 @@ bool Voyage::operator> (const Voyage & p_other) const{
 	return(this->getHeureDepart() > p_other.getHeureDepart());
 }
 
+
 Arret & Voyage::arretDeLaStation(unsigned int p_num_station){
 	Arret* resultat;
 	bool trouve = false;

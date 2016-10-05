@@ -1,4 +1,4 @@
-Chargement des données terminé en 9.30355 secondes
+Chargement des données terminé en 8.96727 secondes
 ====================================== 
 LIGNES DE LA RTC
 COMPTE = 163

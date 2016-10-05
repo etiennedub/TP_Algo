@@ -84,15 +84,6 @@ void Ligne::addVoyage(Voyage* ptr_voyage){
 	m_voyages.push_back(ptr_voyage);
 }
 
-//std::pair<std::string, std::string> Ligne::getDestinations() const{
-//	std::vector<std::string> resultat = split(m_description, '-');
-//	try{
-//		return std::pair<std::string, std::string> (resultat[0],resultat[1]);
-//	}
-//	catch(const std::out_of_range& e){
-//		return std::pair<std::string, std::string> ("","");
-//	}
-//}
 
 std::pair<std::string, std::string> Ligne::getDestinations() const{
 	std::vector<std::string> resultat = split(m_description, '-');

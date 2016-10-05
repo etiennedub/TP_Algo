@@ -62,7 +62,20 @@ Heure Voyage::getHeureFin() const{
 void Voyage::setArrets(std::vector<Arret>& resultat){
 	m_arrets = resultat;
 
+	Heure derniereHeure;
 	std::sort(m_arrets.begin(), m_arrets.end());
+	for(auto it = m_arrets.begin(); it < m_arrets.end(); ++it){
+		Heure actuelHeure = it->getHeureDepart();
+		if(actuelHeure == derniereHeure){
+			actuelHeure.add_secondes(30);
+			it->setHeureDepart(actuelHeure);
+			std::sort(m_arrets.begin(), m_arrets.end());
+			it--;
+		}
+		else{
+			derniereHeure = actuelHeure;
+		}
+	}
  }
 
 bool Voyage::operator< (const Voyage & p_other) const{
@@ -71,6 +84,20 @@ bool Voyage::operator< (const Voyage & p_other) const{
 bool Voyage::operator> (const Voyage & p_other) const{
 	return(this->getHeureDepart() > p_other.getHeureDepart());
 }
+
+Arret & Voyage::arretDeLaStation(unsigned int p_num_station){
+	Arret* resultat;
+	bool trouve = false;
+	for(int i = 0; i < m_arrets.size(); i++){
+		if(m_arrets[i].getStationId() == p_num_station){
+			resultat = &m_arrets[i];
+			trouve = true;
+			break;
+		}
+	}
+	return (*resultat);
+}
+
 std::ostream & operator<<(std::ostream & flux, const Voyage & p_voyage){
 	flux << p_voyage.getLigne()->getNumero() << ": Vers ";
 	flux << p_voyage.m_destination << "\n";

@@ -48,3 +48,7 @@ double Coordonnees::operator- (const Coordonnees & other) const{
 	return( rayonTerreKm * std::acos(std::sin(lat1)*std::sin(lat2)
 			+std::cos(lat1)*std::cos(lat2)*std::cos(lon2-lon1)));
  }
+
+std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord){
+	flux << "(" << p_coord.m_latitude << ", " << p_coord.m_longitude << ")";
+}

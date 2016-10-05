@@ -12,22 +12,14 @@
 #include <map>
 
 
-void testVoyage();
-int main(){
-
-	testVoyage();
-
-}
-
-
 std::vector<std::vector<std::string>> lireFichier(std::string path){
 	std::string file_p = path;
 	std::vector<std::vector<std::string>> resultats;
 	lireFichier(file_p, resultats, ',' , true);
 	return resultats;
 }
+int main(){
 
-void testVoyage(){
 	const clock_t tempsDebut = clock();
 	std::ofstream textAEcrire;
 	textAEcrire.open ("out.txt");
@@ -103,6 +95,8 @@ void testVoyage(){
 	}
 
 	std::cout << float( clock () - tempsDebut ) /  CLOCKS_PER_SEC;
+
+	textAEcrire.close();
 	// Section Delete :
 
 	for ( std::unordered_map <std::string, Ligne*>::iterator it = mapLigne.begin(); it != mapLigne.end(); ++it ){
@@ -114,7 +108,6 @@ void testVoyage(){
 	for ( std::multimap <Heure, Voyage*>::iterator it = mapVoyage.begin(); it != mapVoyage.end(); ++it ){
 		delete it->second;
 	}
-	textAEcrire.close();
 
 
 }

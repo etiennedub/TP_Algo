@@ -30,9 +30,9 @@ public:
 
     static bool is_valide_coord(double p_latitude, double p_longitude) ;//fonction qui valide les coordonnées
 
-    double operator- (const Coordonnees & other) const;//méthode qui
+    double operator- (const Coordonnees & other) const;
 
-    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord);
+    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord); //fonction qui affiche les coordonnees
 
 private:
     double m_latitude;//param de la latitude

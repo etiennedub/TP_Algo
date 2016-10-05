@@ -13,7 +13,6 @@
 
 
 
-
 void testVoyage();
 
 int main(){
@@ -90,7 +89,8 @@ void testVoyage(){
 			<< ligneOrdre.size() << std::endl << ligneTexte;
 	for ( std::map <std::string, Ligne*>::iterator it = ligneOrdre.begin(); it != ligneOrdre.end(); ++it ){
 		textAEcrire << (*it->second) << std::endl;
-	}
+//<<<<<<< HEAD
+	}/*
 	textAEcrire << ligneTexte << "STATIONS DE LA RTC" << std::endl << "COMPTE = "
 				<< mapStation.size() << std::endl << ligneTexte;
 	for ( std::map <unsigned int, Station>::iterator it = mapStation.begin(); it != mapStation.end(); ++it ){
@@ -111,6 +111,29 @@ void testVoyage(){
 	for ( std::unordered_map <std::string, Ligne*>::iterator it = mapLigne.begin(); it != mapLigne.end(); ++it ){
 		delete it->second;
 	}
+=======
+	}*/
+	textAEcrire << ligneTexte << "STATIONS DE LA RTC" << std::endl << "COMPTE = "
+				<< mapStation.size() << std::endl << ligneTexte;
+	for ( std::map <unsigned int, Station>::iterator it = mapStation.begin(); it != mapStation.end(); ++it ){
+			textAEcrire << it->second << std::endl;
+		}
+	textAEcrire << ligneTexte << "VOYAGES DE LA JOURNÉE DU " << date
+			<< std::endl << debut << " - " << fin << std::endl
+			<< "COMPTE = "<< mapVoyage.size() << std::endl << ligneTexte;
+	for(std::multimap <Heure, Voyage*>::iterator it = mapVoyage.begin(); it != mapVoyage.end(); ++it){
+		if(it->first > debut){
+			textAEcrire << (*it->second);
+		}
+	}
+
+	std::cout << float( clock () - tempsDebut ) /  CLOCKS_PER_SEC;
+	// Section Delete :
+
+	for ( std::unordered_map <std::string, Ligne*>::iterator it = mapLigne.begin(); it != mapLigne.end(); ++it ){
+		delete it->second;
+	}
+//>>>>>>> 6689bd050ff2edf40a8b5b8bf6c61ec96c7631a5
 	for ( std::unordered_multimap <std::string, Arret*>::iterator it = mapArret.begin(); it != mapArret.end(); ++it ){
 		delete it->second;
 	}

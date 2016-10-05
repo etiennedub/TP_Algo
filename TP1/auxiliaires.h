@@ -65,11 +65,11 @@ public:
 	Heure();
 	Heure(unsigned int heure, unsigned int min, unsigned int sec);
 	Heure add_secondes(unsigned int secs);
-	bool operator== (const Heure & other) const;
-	bool operator< (const Heure & other) const;
-	bool operator> (const Heure & other) const;
-	bool operator<= (const Heure & other) const;
-	bool operator>= (const Heure & other) const;
+	bool operator== (const Heure & other) const;//fonction booléen qui compare les heures, retourne True si sont égales
+	bool operator< (const Heure & other) const;//fonction booléen qui compare l'heures, retourne True si est plus petite
+	bool operator> (const Heure & other) const;//fonction booléen qui compare l'heures, retourne True si est plus grande
+	bool operator<= (const Heure & other) const;//fonction booléen qui compare l'heures, retourne True si est plus petite ou égales
+	bool operator>= (const Heure & other) const;//fonction booléen qui compare l'heures, retourne True si est plus grande ou égales
 	int operator- (const Heure & other) const;
 	friend std::ostream & operator<<(std::ostream & flux, const Heure & p_heure);
 

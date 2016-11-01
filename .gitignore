@@ -10,6 +10,8 @@ local.properties
 .settings/
 .loadpath
 .idea
+out.txt
+CMakeLists.txt
 .recommenders
 Debug/
 RTC/

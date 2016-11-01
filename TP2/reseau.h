@@ -12,9 +12,7 @@
 #define INFINI 999999
 #define DEFAULT_TYPE 0
 
-/*!
- *
- */
+
 typedef std::unordered_map<unsigned int, std::pair<unsigned int, unsigned int> > liste_arcs;
 typedef std::unordered_multimap< unsigned int, liste_arcs > liste_sommets;
 
@@ -52,6 +50,7 @@ public:
 	int bellmanFord(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin)
 				throw (std::logic_error);
 	bool estFortementConnexe() const;
+    // égal au nombre de composantes fortement connexe
 	int getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const;
 
 private:

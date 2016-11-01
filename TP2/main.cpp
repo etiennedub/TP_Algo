@@ -15,10 +15,24 @@
 
 int main(){
 	Reseau test;
+
 	test.ajouterSommet(1);
-    test.ajouterArc(1,2,4);
-    bool teste = test.sommetExiste(1);
-    teste = test.sommetExiste(2);
-    teste = test.arcExiste(3,2);
-    int chose = 1;
+    test.ajouterArc(1,2,1);
+    test.ajouterArc(1,3,5);
+
+    test.ajouterSommet(2);
+    test.ajouterArc(2,3,2);
+    test.ajouterArc(2,4,5);
+
+    test.ajouterSommet(3);
+    test.ajouterArc(3,5,1);
+
+    test.ajouterSommet(4);
+    test.ajouterArc(4,5,5);
+
+    test.ajouterSommet(5);
+
+    std::vector<unsigned int> chemin;
+    int teste = test.dijkstra(1,5, chemin);
+    int chose = 3;
 }

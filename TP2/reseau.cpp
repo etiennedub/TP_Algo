@@ -149,3 +149,85 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
         throw (e);
     }
 }
+
+int Reseau::bellmanFord(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin)
+throw (std::logic_error){
+    bool relachement;
+    //                  ID,                     Distance,   Predeceseur
+    std::unordered_map<unsigned int, std::pair<unsigned int, unsigned int>> information;
+    for (auto it = m_sommets.begin(); it != m_sommets.end(); ++it ){
+        information.insert({it->first,std::pair<unsigned  int, unsigned int>(INFINI, INFINI)});
+    }
+    information[numOrigine] =  std::pair<unsigned int, unsigned int>(0, INFINI);
+
+    // NbSommet - 1 fois
+    for (int i = 0; i < m_sommets.size() - 1; i++){
+        relachement = false;
+        // NbArc
+        for (auto itSommet = m_sommets.begin(); itSommet != m_sommets.end(); ++itSommet ){
+            for (auto itArc = itSommet->second.begin(); itArc != itSommet->second.end(); ++itArc ){
+                unsigned int destination = itArc->first;
+                unsigned int source = itSommet->first;
+                unsigned int coutInit = information[destination].first;
+                unsigned int coutNouveau = information[source].first + itArc->second.first;
+                if (coutNouveau < coutInit){
+                    relachement = true;
+                    // Cout
+                    information[destination].first = coutNouveau;
+                    // Predeceseur
+                    information[destination].second = source;
+                }
+
+            }
+        }
+        if (relachement == false) break;
+    }
+    auto it = information.at(numDest);
+    while (it != information.at(numOrigine)){
+        int predeceseur = it.second;
+        chemin.push_back(it.second);
+        it = information.at(predeceseur);
+    }
+    return information[numDest].first;
+}
+
+int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const{
+    Reseau sommet_inverse;
+    std::vector<unsigned int> pile;
+    std::set<unsigned int> nonVisite;
+    for (auto itSommet = m_sommets.begin(); itSommet != m_sommets.end(); ++itSommet ) {
+        nonVisite.insert(itSommet->first);
+        for (auto itArc = itSommet->second.begin(); itArc != itSommet->second.end(); ++itArc) {
+            // inverse sommet
+            sommet_inverse.ajouterSommet(itArc->first);
+            sommet_inverse.ajouterArc(itArc->first, itSommet->first, INFINI);
+
+
+        }
+    }
+
+//    pile.push_back(m_sommets.begin()->first);
+//    auto itSommetPile = pile.begin(); // debut de la pile
+//    while(nonVisite.size() != 0) {
+//
+//        while (itSommetPile != pile.end()) {
+//            const unsigned int sommetCourant = (*itSommetPile);
+//            nonVisite.insert(sommetCourant);
+//            for (auto itArc = m_sommets.find(sommetCourant)->second.begin();
+//                 itArc != m_sommets.find(sommetCourant)->second.end(); ++itArc) {
+//                unsigned int destination = itArc->first;
+//                // O(log n) contrairement vector O(n)
+//                if (nonVisite.find(destination) != nonVisite.end()) {
+//                    pile.push_back(destination);
+//                }
+//            }
+//            itSommetPile++;
+//        }
+//    }
+//    return 1;
+}
+
+bool Reseau::estFortementConnexe() const{
+    std::vector<std::vector<unsigned int> > composantes;
+    return (this->getComposantesFortementConnexes(composantes) == 1);
+}

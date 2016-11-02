@@ -32,7 +32,7 @@ int main(){
 
     test.ajouterSommet(5);
 
-    std::vector<unsigned int> chemin;
-    int teste = test.dijkstra(1,5, chemin);
+    std::vector<std::vector<unsigned int> > chemin;
+    int teste = test.getComposantesFortementConnexes(chemin);
     int chose = 3;
 }

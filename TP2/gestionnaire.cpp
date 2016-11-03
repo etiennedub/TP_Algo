@@ -9,33 +9,21 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier){
 }
 
 bool Gestionnaire::date_est_prise_en_charge(const Date& date){
-	std::unordered_map<std::string,int>::iterator it;
-	for(it = m_voyages.begin(); it != m_voyages.end(); it++){
-		if(m_voyages_date.count(date)>0)
-			return true;
-		else
-			return false;
-	}
+
+
 }
 
 bool Gestionnaire::bus_existe(std::string num_ligne){
-	std::unordered_map<std::string,int>::iterator it;
-	for(it = m_lignes.begin(); it != m_lignes.end(); it++){
-		if(m_lignes.count(num_ligne)>0)
-			return true;
-		else
-			return false;
+	if(m_lignes.find(num_ligne)==m_lignes.end()){
+		return false;
+	}else{
+		return true;
 	}
+
 }
 
 bool Gestionnaire::station_existe(int station_id){
-	std::unordered_map<std::string,int>::iterator it;
-	for(it = m_stations.begin(); it != m_stations.end(); it++){
-		if(m_stations.count(station_id)>0)
-			return true;
-		else
-			return false;
-	}
+
 }
 
 Ligne Gestionnaire::getLigne(std::string num_ligne){

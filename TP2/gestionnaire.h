@@ -64,9 +64,12 @@ public:
 
 private:
 	Reseau m_reseau;
+    //                 route_short_name
     std::unordered_map<std::string, std::pair<Ligne, std::vector<unsigned int>>> m_lignes;
+    //                  stop_id
     std::unordered_map<unsigned int, Station> m_stations;
-     std::unordered_map<unsigned int, Voyage> m_voyages;
+    //                  route_id
+    std::unordered_map<unsigned int, Voyage> m_voyages;
     std::multimap <Date, Voyage*> m_voyages_date;
 	void initialiser_reseau(Date date, Heure heure_depart, Heure heure_fin, Coordonnees depart, Coordonnees dest,
 			double dist_de_marche=distance_max_initiale, double dist_transfert=distance_max_transfert);

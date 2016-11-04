@@ -7,15 +7,10 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
     std::unordered_multimap <std::string, Arret> mapArret;
     std::unordered_map <unsigned int, Ligne*> mapLigneID;
     std::unordered_map <std::string, Voyage*> mapVoyageServiceID;
-
-
-    // Creation objets Station
+    std::unordered_map <std::string, Voyage*> mapVoyageTripID;
+    //                  stopID,      tripID
+    std::unordered_map <unsigned int, std::vector<std::string>> stopIDtoTripID;
     std::vector<std::vector<std::string>> fichier;
-    lireFichier(chemin_dossier + "/stops.txt", fichier, ',', true);
-    for (int i = 0; i < fichier.size(); i++) {
-        Station station = Station(fichier[i]);
-        m_stations.insert({station.getId(), station});
-    }
 
     // Creation objets Arret
     fichier.clear();
@@ -23,11 +18,25 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
     for (int i = 0; i < fichier.size(); i++){
         Arret arret = Arret(fichier[i]);
         mapArret.insert({arret.getVoyageId(), arret});
+        unsigned int stopID = std::stoi(fichier[i][3]);
+        std::string tripID = fichier[i][0];
+        auto itExiste = stopIDtoTripID.find(stopID);
+        if ( itExiste != stopIDtoTripID.end()){
+            // Existe
+            itExiste->second.push_back(tripID);
+        }
+        else{
+            // Nouveau stopID
+            std::vector<std::string> vecTripID;
+            vecTripID.push_back(tripID);
+            stopIDtoTripID.insert({stopID, vecTripID});
+        }
+
     }
 
     // Creation objets Ligne
     fichier.clear();
-    lireFichier(chemin_dossier + "/stops.txt", fichier, ',', true);
+    lireFichier(chemin_dossier + "/routes.txt", fichier, ',', true);
     for (int i = 0; i < fichier.size(); i++){
         Ligne ligne = Ligne(fichier[i]);
         auto ligneExiste = m_lignes.find(ligne.getNumero());
@@ -54,7 +63,6 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
         Ligne* ligneVoyage = mapLigneID[routeID];
         Voyage voyage = Voyage(fichier[i], ligneVoyage);
 
-
         auto range = mapArret.equal_range(fichier[i][2]);
         std::vector<Arret> vecArret;
         for ( auto it = range.first ; it != range.second; ++it){
@@ -63,6 +71,7 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
         voyage.setArrets(vecArret);
         m_voyages.insert({std::stoi(voyage.getId()), voyage});
         mapVoyageServiceID.insert({fichier[i][0], &voyage});
+        mapVoyageTripID.insert({fichier[i][2], &voyage});
     }
 
     // Lien avec les Dates
@@ -75,9 +84,22 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
         unsigned int jour = std::stoi(fichier[i][6,8]);
         Date date = Date(an, mois, jour);
         m_voyages_date.insert({date, mapVoyageServiceID[serviceID]});
+
+
     }
 
-
+    // Creation objets Station
+    fichier.clear();
+    lireFichier(chemin_dossier + "/stops.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++) {
+        Station station = Station(fichier[i]);
+        unsigned int stopID = std::stoi(fichier[i][0]);
+        std::vector<Voyage*> vecVoyage;
+        for ( auto itTripID = stopIDtoTripID[stopID].begin(); itTripID != stopIDtoTripID[stopID].end(); itTripID++){
+            station.addVoyage(mapVoyageTripID[(*itTripID)]);
+        }
+        m_stations.insert({station.getId(), station});
+    }
 }
 
 bool Gestionnaire::date_est_prise_en_charge(const Date& date){
@@ -95,4 +117,21 @@ bool Gestionnaire::station_existe(int station_id){
 Ligne Gestionnaire::getLigne(std::string num_ligne){
     return m_lignes.at(num_ligne).first;
 }
+
+Station Gestionnaire::getStation(int station_id){
+    return m_stations.at(station_id);
+}
+
+std::pair<std::string, std::string> Gestionnaire::get_bus_destinations(int station_id, std::string num_ligne){
+    std::vector<Ligne*> vecLigne = getStation(station_id).getLignesPassantes();
+    std::pair<std::string, std::string> resultat = std::pair<std::string, std::string> ("","");
+    for (auto it  = vecLigne.begin(); it != vecLigne.end(); it++){
+        if ( (*it)->getNumero() == num_ligne){
+            resultat = (*it)->getDestinations();
+            break;
+        }
+    }
+    return resultat;
+}
+
 

@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <map>
 #include "reseau.h"
+#include "gestionnaire.h"
 
 
 int main(){
@@ -35,4 +36,6 @@ int main(){
     std::vector<std::vector<unsigned int> > chemin;
     int teste = test.getComposantesFortementConnexes(chemin);
     int chose = 3;
+
+    Gestionnaire allo = Gestionnaire("RTC");
 }

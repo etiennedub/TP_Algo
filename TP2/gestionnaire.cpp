@@ -4,46 +4,87 @@
 #include "gestionnaire.h"
 
 Gestionnaire::Gestionnaire(std::string chemin_dossier) {
-//    // expemple lecture fichier
-//    std::string file_p = path;
-//    std::vector<std::vector<std::string>> resultats;
-//    lireFichier(file_p, resultats, ',' , true);
+    std::unordered_multimap <std::string, Arret> mapArret;
+    std::unordered_map <unsigned int, Ligne*> mapLigneID;
+    std::unordered_map <std::string, Voyage*> mapVoyageServiceID;
 
-    std::vector<std::vector<std::string>> fichierRoutes;
-    std::vector<std::vector<std::string>> fichierTrips;
-    std::vector<std::vector<std::string>> fichierStopTimes;
-    std::vector<std::vector<std::string>> fichierStops;
-    std::vector<std::vector<std::string>> fichierCalendarDates;
 
-    lireFichier(chemin_dossier + "/routes.txt", fichierRoutes, ',', true);
-    lireFichier(chemin_dossier + "/trips.txt", fichierTrips, ',', true);
-    lireFichier(chemin_dossier + "/stop_times.txt", fichierStopTimes, ',', true);
-    lireFichier(chemin_dossier + "/stops.txt", fichierStops, ',', true);
-    lireFichier(chemin_dossier + "/calendar_dates.txt", fichierCalendarDates, ',', true);
-
-    // Creation objets station
-    for (int i = 0; i < fichierStops.size(); i++) {
-        Station station = Station(fichierStops[i]);
-        // mapStation.insert({tempo.getId(), tempo});
+    // Creation objets Station
+    std::vector<std::vector<std::string>> fichier;
+    lireFichier(chemin_dossier + "/stops.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++) {
+        Station station = Station(fichier[i]);
+        m_stations.insert({station.getId(), station});
     }
+
+    // Creation objets Arret
+    fichier.clear();
+    lireFichier(chemin_dossier + "/stop_times.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++){
+        Arret arret = Arret(fichier[i]);
+        mapArret.insert({arret.getVoyageId(), arret});
+    }
+
+    // Creation objets Ligne
+    fichier.clear();
+    lireFichier(chemin_dossier + "/stops.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++){
+        Ligne ligne = Ligne(fichier[i]);
+        auto ligneExiste = m_lignes.find(ligne.getNumero());
+        if (ligneExiste != m_lignes.end()) {
+            // Ligne existe
+            ligneExiste->second.second.push_back(ligne.getId());
+            mapLigneID.insert({ligneExiste->second.first.getId(), &ligneExiste->second.first});
+        }
+        else{
+            // Ligne non presente
+            std::vector<unsigned int> vectorID;
+            vectorID.push_back(ligne.getId());
+            m_lignes.insert({ligne.getNumero(), std::pair<Ligne, std::vector<unsigned int>>
+                    (ligne, vectorID)});
+            mapLigneID.insert({ligne.getId(), &ligne});
+        }
+    }
+
+    // Creation objets Voyage
+    fichier.clear();
+    lireFichier(chemin_dossier + "/trips.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++){
+        unsigned int routeID = std::stoi(fichier[i][0]);
+        Ligne* ligneVoyage = mapLigneID[routeID];
+        Voyage voyage = Voyage(fichier[i], ligneVoyage);
+
+
+        auto range = mapArret.equal_range(fichier[i][2]);
+        std::vector<Arret> vecArret;
+        for ( auto it = range.first ; it != range.second; ++it){
+            vecArret.push_back(it->second);
+        }
+        voyage.setArrets(vecArret);
+        m_voyages.insert({std::stoi(voyage.getId()), voyage});
+        mapVoyageServiceID.insert({fichier[i][0], &voyage});
+    }
+
+    // Lien avec les Dates
+    fichier.clear();
+    lireFichier(chemin_dossier + "/calendar_dates.txt", fichier, ',', true);
+    for (int i = 0; i < fichier.size(); i++){
+        std::string serviceID = fichier[0][1];
+        unsigned int an = std::stoi(fichier[i][0,4]);
+        unsigned int mois = std::stoi(fichier[i][4,6]);
+        unsigned int jour = std::stoi(fichier[i][6,8]);
+        Date date = Date(an, mois, jour);
+        m_voyages_date.insert({date, mapVoyageServiceID[serviceID]});
+    }
+
+
 }
 
 bool Gestionnaire::date_est_prise_en_charge(const Date& date){
+<<<<<<< HEAD
 
 }
 
-
-/*Ligne Gestionnaire::getLigne(std::string num_ligne){
-	std::string::iterator i= m_lignes.find(num_ligne);
-	for(int i=0; i<m_lignes.size(); i++){
-		if(m_lignes != m_lignes.end()){
-			return (*i).second->first;
-		}
-		else{
-			throw "Il n'existe pas de ligne ayant ce numero";
-		}
-	}
-}*/
 
 Station Gestionnaire::getStation(int station_id){
 	auto itr = m_stations.find(station_id);
@@ -57,13 +98,16 @@ Station Gestionnaire::getStation(int station_id){
 	}
 }
 
-std::pair<std::string, std::string> get_bus_destinations(int station_id, std::string num_ligne){
+/*std::pair<std::string, std::string> get_bus_destinations(int station_id, std::string num_ligne){
 
 		//return (m_voyages_date.count(date) > 0);
-}
+=======
+		return (m_voyages_date.find(date) != m_voyages_date.end());
+>>>>>>> bccbf289d2644e5f35953abfd0e917cada4ac409
+}*/
 
 bool Gestionnaire::bus_existe(std::string num_ligne){
-		return (m_lignes.count(num_ligne) > 0);
+		return (m_lignes.find(num_ligne) != m_lignes.end());
 }
 
 bool Gestionnaire::station_existe(int station_id){
@@ -71,7 +115,11 @@ bool Gestionnaire::station_existe(int station_id){
 }
 
 std::vector<Voyage*> Gestionnaire::trouver_voyages(int station_id, std::string num_ligne){
+		return (m_stations.find(station_id) != m_stations.end());
+}
 
+Ligne Gestionnaire::getLigne(std::string num_ligne){
+    return m_lignes.at(num_ligne).first;
 }
 
 

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "station.h"
 #include "voyage.h"
 #include "reseau.h"
@@ -67,7 +68,7 @@ private:
     std::unordered_map<std::string, std::pair<Ligne, std::vector<unsigned int>>> m_lignes;
     std::unordered_map<unsigned int, Station> m_stations;
      std::unordered_map<unsigned int, Voyage> m_voyages;
-//    std::unordered_map<Date, Voyage*> m_voyages_date;
+    std::multimap <Date, Voyage*> m_voyages_date;
 	void initialiser_reseau(Date date, Heure heure_depart, Heure heure_fin, Coordonnees depart, Coordonnees dest,
 			double dist_de_marche=distance_max_initiale, double dist_transfert=distance_max_transfert);
 

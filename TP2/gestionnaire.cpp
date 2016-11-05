@@ -170,7 +170,14 @@ bool Gestionnaire::station_existe(int station_id){
 * \exception logic_error si la ligne est inexistante
 */
 std::vector<Voyage*> Gestionnaire::trouver_voyages(int station_id, std::string num_ligne){
-		return (m_stations.find(station_id) != m_stations.end());
+    std::vector<Voyage*> resultat;
+    std::vector<Voyage*> temporaire = m_stations.find(station_id)->second->getVoyagesPassants();
+    for (auto it = temporaire.begin(); it != temporaire.end(); ++it){
+        if((*it)->getLigne()->getNumero() == num_ligne){
+            resultat.push_back((*it));
+        }
+    }
+    return resultat;
 }
 
 /*!

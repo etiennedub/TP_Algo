@@ -1,5 +1,6 @@
 #include <set>
 #include "reseau.h"
+#include <algorithm>
 
 //
 // Created by etienned on 10/31/16.
@@ -295,41 +296,56 @@ throw (std::logic_error){
     return information[numDest].first;
 }
 
-int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const{
+int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const {
     Reseau sommet_inverse;
     std::vector<unsigned int> pile;
     std::set<unsigned int> nonVisite;
-    for (auto itSommet = m_sommets.begin(); itSommet != m_sommets.end(); ++itSommet ) {
+
+    for (auto itSommet = m_sommets.begin(); itSommet != m_sommets.end(); ++itSommet) {
         nonVisite.insert(itSommet->first);
         for (auto itArc = itSommet->second.begin(); itArc != itSommet->second.end(); ++itArc) {
             // inverse sommet
             sommet_inverse.ajouterSommet(itArc->first);
             sommet_inverse.ajouterArc(itArc->first, itSommet->first, INFINI);
-
-
         }
     }
 
-//    pile.push_back(m_sommets.begin()->first);
-//    auto itSommetPile = pile.begin(); // debut de la pile
-//    while(nonVisite.size() != 0) {
-//
-//        while (itSommetPile != pile.end()) {
-//            const unsigned int sommetCourant = (*itSommetPile);
-//            nonVisite.insert(sommetCourant);
-//            for (auto itArc = m_sommets.find(sommetCourant)->second.begin();
-//                 itArc != m_sommets.find(sommetCourant)->second.end(); ++itArc) {
-//                unsigned int destination = itArc->first;
-//                // O(log n) contrairement vector O(n)
-//                if (nonVisite.find(destination) != nonVisite.end()) {
-//                    pile.push_back(destination);
-//                }
-//            }
-//            itSommetPile++;
-//        }
-//    }
-//    return 1;
+    // Graphe initiale
+    int  indexSommetPile = 0; // debut de la pile
+    while (m_sommets.size() != pile.size()) {
+        pile.push_back(m_sommets.find((*nonVisite.begin()))->first);
+        for (; indexSommetPile != pile.size() ;indexSommetPile++){
+            liste_arcs arcsSuivant = m_sommets.find(pile[indexSommetPile])->second;
+            for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
+                if (nonVisite.find(it->first) != nonVisite.end()) {
+                    pile.push_back(it->first);
+                    nonVisite.erase(it->first);
+                }
+            }
+        }
+    }
+
+    // Graphe inverse
+    std::vector<unsigned int> nouvellePile;
+    int indexComposante;
+    while (!pile.empty()) {
+        int ajouter = (*(pile.begin()));
+        nouvellePile.push_back(m_sommets.find(ajouter)->first);
+        for (auto it = nouvellePile.begin(); it != nouvellePile.end() ;++it){
+            ajouter = (*it);
+            std::cout << ajouter;
+            liste_arcs arcsSuivant = sommet_inverse.m_sommets.find(ajouter)->second;
+            for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
+                nouvellePile.push_back(it->first);
+            }
+            pile.erase(std::remove(pile.begin(), pile.end(), (*it)), pile.end());
+        }
+        composantes[indexComposante] = nouvellePile;
+        nouvellePile.clear();
+        indexComposante += 1;
+    }
 }
+
 
 bool Reseau::estFortementConnexe() const{
     std::vector<std::vector<unsigned int> > composantes;

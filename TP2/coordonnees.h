@@ -5,10 +5,11 @@
 #ifndef RTC_COORDONNEES_H
 #define RTC_COORDONNEES_H
 
+#include <cmath>
+#include <exception>
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
-#include <cmath>
 
 /*!
  * \class Coordonnees
@@ -17,26 +18,26 @@
 class Coordonnees {
 
 public:
-	//constructeur de la clase coordonnees
+
     Coordonnees(double latitude, double longitude);
 
-    double getLatitude() const ;//méthode qui permet de récupérer la latitude
+    double getLatitude() const ;
 
-    void setLatitude(double latitude) ;//méthode qui permet de fixer la latitude
+    void setLatitude(double latitude) ;
 
-    double getLongitude() const ;//méthode qui permet de récupérer la longitude
+    double getLongitude() const ;
 
-    void setLongitude(double longitude) ;//méthode qui permet de fixer la longitude
+    void setLongitude(double longitude) ;
 
-    static bool is_valide_coord(double p_latitude, double p_longitude) ;//fonction qui valide les coordonnées
+    static bool is_valide_coord(double p_latitude, double p_longitude) ;
 
     double operator- (const Coordonnees & other) const;
 
-    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord); //fonction qui affiche les coordonnees
+    friend std::ostream & operator<<(std::ostream & flux, const Coordonnees & p_coord);
 
 private:
-    double m_latitude;//param de la latitude
-    double m_longitude;//param de la longétude
+    double m_latitude;
+    double m_longitude;
 };
 
 

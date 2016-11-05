@@ -149,7 +149,7 @@ Ligne Gestionnaire::getLigne(std::string num_ligne){
 std::vector<std::pair<double, Station*>>Gestionnaire::trouver_stations_environnantes(Coordonnees coord, double rayon){
 
 }
-=======
+
 Station Gestionnaire::getStation(int station_id){
     return m_stations.at(station_id);
 }

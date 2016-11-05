@@ -3,6 +3,12 @@
 //
 #include "gestionnaire.h"
 
+/**
+ * \brief Constructeur de la class Gestionnaire. Lire et charger les
+ * fichier gtfs: routes.txt, trips.txt, stop_times.txt, calendar_dates.txt
+ *
+ * \param string chemin_dossier: chemin d'acces vers le dossier gtfs
+ */
 Gestionnaire::Gestionnaire(std::string chemin_dossier) {
     std::unordered_map <unsigned int, Ligne*> mapLigneID;
     std::unordered_multimap <std::string, Voyage*> mapVoyageServiceID;
@@ -122,58 +128,86 @@ Gestionnaire::~Gestionnaire(){
     }
 }
 
+
+/**
+ * \brief Permet de vérifier si une date existe dans l'ensemble des dates de "calendar.txt"
+ * lors de la construction du gestionnaire.
+ * \param date: la date d'intérêt
+ * \return True ssi la date est prise en charge dans l'application
+ */
 bool Gestionnaire::date_est_prise_en_charge(const Date& date){
 	return (m_voyages_date.find(date) != m_voyages_date.end());
 
 }
 
 
-Station Gestionnaire::getStation(int station_id){
-	auto itr = m_stations.find(station_id);
-	//if(m_stations.find(station_id) == m_stations.end()){
-	if(itr != end(m_stations)){
-		return itr->second;
-	}
-	else{
-		throw "Il n'existe pas de station ayant cet identifiant";
-
-	}
-}
-
-/*std::pair<std::string, std::string> get_bus_destinations(int station_id, std::string num_ligne){
-
-		//return (m_voyages_date.count(date) > 0);
-=======
-		return (m_voyages_date.find(date) != m_voyages_date.end());
->>>>>>> bccbf289d2644e5f35953abfd0e917cada4ac409
-}*/
-
+/*!
+* \brief Permet de vérifier si une ligne avec un certain numéro existe dans l’ensemble des
+lignes chargées dans le constructeur.
+* \param num_ligne: le numéro de la ligne d'intérêt
+* \return True ssi le numéro est pris en charge
+*/
 bool Gestionnaire::bus_existe(std::string num_ligne){
 		return (m_lignes.find(num_ligne) != m_lignes.end());
 }
 
+/*!
+* \brief Permet de vérifier si un numéro de station existe dans l’ensemble des stations
+chargées dans le constructeur.
+* \param station_id: l'identifiant de la station d'intérêt
+* \return True ssi la station est prise en charge
+*/
 bool Gestionnaire::station_existe(int station_id){
 		return (m_stations.count(station_id) >0 );
 }
 
+/*!
+* \brief Permet de trouver les voyages d'une ligne qui passe par une station
+* \param station_id: l'identifiant de la station d'intérêt
+* \param num_ligne: le numéro de la ligne d'intérêt
+* \return un vecteur contenant des pointeurs vers les voyages trouvés
+* \exception logic_error si la station est inexistante
+* \exception logic_error si la ligne est inexistante
+*/
 std::vector<Voyage*> Gestionnaire::trouver_voyages(int station_id, std::string num_ligne){
 		return (m_stations.find(station_id) != m_stations.end());
 }
 
+/*!
+* \brief Accès à une ligne à partir de son numéro
+* \param num_ligne: le numéro de la ligne d'intérêt
+* \return objet Ligne correspondant au numéro d'intérêt
+* \exception Il n’existe pas de ligne ayant ce numéro
+*/
 Ligne Gestionnaire::getLigne(std::string num_ligne){
     return (*(m_lignes.at(num_ligne).first));
 }
 
-<<<<<<< HEAD
-
-std::vector<std::pair<double, Station*>>Gestionnaire::trouver_stations_environnantes(Coordonnees coord, double rayon){
-
-}
-
+/*!
+* \brief Accès à une station à partir de son id
+* \param station_id: l'identifiant de la station d'intéret
+* \return objet Station correspondant à l'id d'intérêt
+* \exception Il n’existe pas de station ayant cet identifiant
+*/
 Station Gestionnaire::getStation(int station_id){
     return (*(m_stations.at(station_id)));
 }
 
+/*!
+* \brief Permet d'obtenir les destinations des voyages d'une ligne s’arrêtant à une station.
+* Notez qu'une ligne de bus ne peut pas avoir plus de deux destinations possibles: une pour
+l'aller et l'autre pour le retour.
+* Dans le cas de certains bus (ex: couche-tard), une seule destination est possible.
+* \param num_ligne: numéro de la ligne d'intérêt
+* \param station_id: numéro de la station d'intérêt
+* \return Une paire de chaîne de caractères.
+* Si le bus ne passe pas par la station, alors une paire de chaîne vide est retournée. \n
+* Sinon Si le bus a deux destinations possibles les deux éléments de la paire doivent être
+différents de la chaîne vide.
+* Si le bus a une seule destination possible, le dernier élément de la paire seulement est
+* égale à une chaîne vide.
+*
+*/
 std::pair<std::string, std::string> Gestionnaire::get_bus_destinations(int station_id, std::string num_ligne){
     std::vector<Ligne*> vecLigne = getStation(station_id).getLignesPassantes();
     std::pair<std::string, std::string> resultat = std::pair<std::string, std::string> ("","");
@@ -186,6 +220,13 @@ std::pair<std::string, std::string> Gestionnaire::get_bus_destinations(int stati
     return resultat;
 }
 
+/*
+* \brief Trouver des stations environnantes étant donnée une coordonnée gps et un rayon
+* \param coord: Coordonnée gps d'intérêt
+* \param rayon: cette distance défini la circonférence a l'intérieure de laquelle on se trouve
+les stations que l'on cherche
+* \return un vecteur de paires (distance, pointeur vers une station) trié par distance
+*/
 std::vector<std::pair<double, Station*>> Gestionnaire::trouver_stations_environnantes(Coordonnees coord, double rayon){
     std::vector<std::pair<double, Station*>> resultat;
     for (auto it = m_stations.begin(); it != m_stations.end(); ++it){
@@ -196,6 +237,20 @@ std::vector<std::pair<double, Station*>> Gestionnaire::trouver_stations_environn
     }
     return resultat;
 };
+
+/*!
+* \brief Trouver le plus court chemin en autobus pour aller d'un point A vers un point B
+dans l’interval de temps défini par interval_planification_en_secondes
+* à partir d'une heure de départ et pour une date donnée
+* Pour ce faire, il faut initialiser le réseau, puis faire appel à ses routines de plus courts
+chemin
+* \param date: la date de planification
+* \param heure_depart: l'heure de début de planification
+* \param depart: coordonnées gps du point de départ de votre déplacement
+* \param destination: coordonnées gps du point de d'arrivée de votre déplacement
+* \return Un vecteur contenant les stations du chemin trouvé, le vecteur est vide si aucun
+chemin n’est trouvé
+*/
 std::vector< unsigned int > Gestionnaire::plus_court_chemin(Date date, Heure heure_depart, Coordonnees depart, Coordonnees destination){
     initialiser_reseau(date, heure_depart, Heure(29,59,59), depart, destination);
     std::vector< unsigned int > chemin;
@@ -203,6 +258,21 @@ std::vector< unsigned int > Gestionnaire::plus_court_chemin(Date date, Heure heu
     return chemin;
 }
 
+/*!
+* \brief trouver l'horaire d'un bus à une station
+* \param date: la date d'intérêt
+* \param heure: l'heure à partir de laquelle on veut l'horaire
+* \param numero_ligne: numéro de la ligne dont on cherche l'horaire
+* \param station_id: l'identifiant de la station où on veut connaitre l'horaire de passage du
+bus
+* \param destination: permet de spécifier dans quelle direction on veut l'horaire.
+* Ceci est pertinent car à certaines stations, la même ligne de bus peut passer dans les deux
+sens.
+* \return un vecteur contenant les heures d'arrivée (en ordre croissant) du bus à la station
+d'intérêt
+* \exception logic_error si la station est inexistante
+* \exception logic_error si la ligne est inexistante
+*/
 std::vector<Heure> Gestionnaire::trouver_horaire(Date date, Heure heure, std::string numero_ligne,
                                    int station_id, std::string destination){
     std::vector<Heure> resultat;
@@ -224,6 +294,29 @@ std::vector<Heure> Gestionnaire::trouver_horaire(Date date, Heure heure, std::st
     return (resultat);
 }
 
+
+/*!
+* \brief initialiser ou réinitialiser l'attribut m_reseau en fonction des paramètres.
+* La date et l'interval de temps spécifié par l'utilisateur servent à trouver les arcs empruntés
+par les bus dans le réseau.
+* Les coordonnées de départ et de destination servent à ajouter des stations fictives ayant
+respectivement les numéros 0 et 1.
+La dist_de_marche sert à ajouter les arcs entre ces stations fictives et toutes les autres
+stations dans un rayon de dist_de_marche.
+* La dist_transfert permet d'ajouter des arcs de transfert entre les stations qui sont à une
+distance l'une de l'autre inférieure à dist_transfert
+* \param date: la date d'intérêt
+* \param heure_depart: l'heure de début.
+* \param heure_fin: l'heure de fin.
+* \param depart: coordonnées gps du point de départ du déplacement pour lequel on
+initialise le réseau
+* \param dest: coordonnées gps du point de d'arrivée du déplacement pour lequel on
+initialise le réseau
+* \param dist_de_marche: permet de spécifier qu’on ne veut pas marcher plus de cette
+distance avant de prendre le bus à partir du point de départ, ou pour se rendre au point de
+destination à partir de la sortie du bus.
+* \param dist_transfert: distance maximale de marche pour un transfert de bus
+*/
 void Gestionnaire::initialiser_reseau(Date date, Heure heure_depart, Heure heure_fin, Coordonnees depart, Coordonnees dest,
                         double dist_de_marche, double dist_transfert){
 
@@ -259,6 +352,7 @@ void Gestionnaire::initialiser_reseau(Date date, Heure heure_depart, Heure heure
         double cout = (itStation->first / vitesse_de_marche) * 3600;
         m_reseau.ajouterArc(0, itStation->second->getId(), cout);
     }
+
 
     // Ajout station destination
     m_reseau.ajouterSommet(1);

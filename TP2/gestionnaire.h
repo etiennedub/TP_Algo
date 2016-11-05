@@ -38,6 +38,8 @@ public:
 
 	Gestionnaire(std::string chemin_dossier);
 
+    ~Gestionnaire();
+
 	bool date_est_prise_en_charge(const Date& date);
 
 	bool bus_existe(std::string num_ligne);
@@ -66,12 +68,13 @@ public:
 private:
 	Reseau m_reseau;
     //                 route_short_name
-    std::unordered_map<std::string, std::pair<Ligne, std::vector<unsigned int>>> m_lignes;
+    std::unordered_map<std::string, std::pair<Ligne*, std::vector<unsigned int>>> m_lignes;
     //                  stop_id
-    std::unordered_map<unsigned int, Station> m_stations;
+    std::unordered_map<unsigned int, Station*> m_stations;
     //                  route_id
-    std::unordered_map<unsigned int, Voyage> m_voyages;
+    std::unordered_map<unsigned int, Voyage*> m_voyages;
     std::multimap <Date, Voyage*> m_voyages_date;
+    std::unordered_multimap <std::string, Arret*> m_arrets;
 	void initialiser_reseau(Date date, Heure heure_depart, Heure heure_fin, Coordonnees depart, Coordonnees dest,
 			double dist_de_marche=distance_max_initiale, double dist_transfert=distance_max_transfert);
 

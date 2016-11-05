@@ -72,7 +72,7 @@ bool Reseau::estVide() const{
 }
 
 bool Reseau::sommetExiste(unsigned int numero) const{
-    return (m_sommets.count(numero) != 0);
+    return (m_sommets.find(numero) != m_sommets.end());
 }
 
 bool Reseau::arcExiste(unsigned int numOrigine, unsigned int numDest) const throw (std::logic_error){
@@ -139,7 +139,7 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
         auto it = information.at(numDest);
         while (it != information.at(numOrigine)){
             int predeceseur = it.second;
-            chemin.push_back(it.second);
+            chemin.insert(chemin.begin(),it.second);
             it = information.at(predeceseur);
         }
         return information[numDest].first;
@@ -185,7 +185,7 @@ throw (std::logic_error){
     auto it = information.at(numDest);
     while (it != information.at(numOrigine)){
         int predeceseur = it.second;
-        chemin.push_back(it.second);
+        chemin.insert(chemin.begin(),it.second);
         it = information.at(predeceseur);
     }
     return information[numDest].first;

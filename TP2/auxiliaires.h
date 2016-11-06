@@ -69,32 +69,55 @@ public:
 	bool operator> (const Date & other) const;
 	friend std::ostream & operator<<(std::ostream & flux, const Date & p_date);
 
+	/**
+	 * \brief avoir m_comde.
+	 * \return m_code.
+	 */
 	int getTimeCode() const{
 		return m_code;
 	}
-
+	/**
+	 * \brief avoir l'année.
+	 * \return m_an.
+	 */
 	unsigned int getAn() const {
 		return m_an;
 	}
 
+	/**
+	 * \brief saisir m_an.
+	 * permet de configurer l'annéee
+	 */
 	void setAn(unsigned int p_an) {
 		this->m_an = p_an;
 		encode(m_an, m_mois, m_jour);
 	}
-
+	/**
+	 * \brief avoir journée.
+	 * \return m_jour.
+	 */
 	unsigned int getJour() const {
 		return m_jour;
 	}
-
+	/**
+	 * \brief attribuer une journée.
+	 *
+	 */
 	void setJour(unsigned int p_jour) {
 		this->m_jour = p_jour;
 		encode(m_an, m_mois, m_jour);
 	}
-
+	/**
+	 * \brief avoir mois.
+	 * \return m_mois.
+	 */
 	unsigned int getMois() const {
 		return m_mois;
 	}
-
+	/**
+	 * \brief attribuer mois.
+	 * permet de changer le mois.
+	 */
 	void setMois(unsigned int p_mois) {
 		this->m_mois = p_mois;
 		encode(m_an, m_mois, m_jour);
@@ -129,28 +152,47 @@ public:
 	int operator- (const Heure & other) const;
 	friend std::ostream & operator<<(std::ostream & flux, const Heure & p_heure);
 
+	/**
+	 * \brief avoir heure .
+	 * \return m_heure.
+	 */
 	unsigned int getHeure() const {
 		return m_heure;
 	}
-
+	/**
+	 * \brief attribuer heure.
+	 * pemet de changer les heures.
+	 */
 	void setHeure(unsigned int p_heure) {
 		this->m_heure = p_heure;
 		encode(m_heure, m_min, m_sec);
 	}
-
+	/**
+	 * \brief avoir minute.
+	 * \return m_minute.
+	 */
 	unsigned int getMin() const {
 		return m_min;
 	}
-
+	/**
+	 * \brief attribuer minutes.
+	 * pemet de changer les minutes.
+	 */
 	void setMin(unsigned int p_min) {
 		this->m_min = p_min;
 		encode(m_heure, m_min, m_sec);
 	}
-
+	/**
+	 * \brief avoir seconde.
+	 * \return m_sec.
+	 */
 	unsigned int getSec() const {
 		return m_sec;
 	}
-
+	/**
+	 * \brief attribuer seconde.
+	 * pemet de changer les secondes.
+	 */
 	void setSec(unsigned int p_sec) {
 		this->m_sec = p_sec;
 		encode(m_heure, m_min, m_sec);

@@ -306,6 +306,13 @@ throw (std::logic_error){
     return information[numDest].first;
 }
 
+/**
+ * \brief obtenir la composantes fortements connexes
+ *
+ *\param vector composantes
+ *
+ * \return la taille de composante.
+ */
 int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const{
     Reseau sommet_inverse;
 
@@ -335,7 +342,13 @@ int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int
     return composantes.size();
 }
 
-
+/**
+ * \brief vérifie si la compoposante est fortements connexes
+ *
+ *\param vector composantes
+ *
+ * \return return vrai si la composante est fortement connexe.
+ */
 bool Reseau::estFortementConnexe() const{
     std::vector<std::vector<unsigned int> > composantes;
     return (this->getComposantesFortementConnexes(composantes) == 1);

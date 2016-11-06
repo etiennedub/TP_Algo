@@ -376,6 +376,15 @@ void Gestionnaire::initialiser_reseau(Date date, Heure heure_depart, Heure heure
     }
 }
 
+/*!
+* \brief permet de déterminer si le réseau de transport est fortement connexe.
+* \param date: la date d'intérêt
+* \param heure: l'heure à partir de laquelle on veut faire le calcul
+* \param[in] considerer_transfert: indique si vous devez considérer ou pas les arcs de
+transfert dans votre calcul
+* \return true ssi à partir de n'importe quelle station du réseau on peut atteindre n'importe
+quelle autre.
+*/
 bool Gestionnaire::reseau_est_fortement_connexe(Date date, Heure heure_debut, bool considerer_transfert){
     int dist_transfert = 0;
     if (considerer_transfert) dist_transfert = INFINI;
@@ -384,6 +393,15 @@ bool Gestionnaire::reseau_est_fortement_connexe(Date date, Heure heure_debut, bo
     return m_reseau.estFortementConnexe();
 }
 
+/*!
+* \brief permet de déterminer les composantes fortement connexes du réseau de transport.
+* \param date: la date d'intérêt
+* \param heure: l'heure à partir de laquelle on veut faire le calcul
+* \param[in] considerer_transfert: indique si vous devez considérer ou pas les arcs de
+transfert dans votre calcul
+* \param[out] composantes: vecteur pour stocker les différentes composantes fortement
+connexes.
+*/
 void Gestionnaire::composantes_fortement_connexes(Date date, Heure heure_debut,
                                     std::vector< std::vector<unsigned int> >& composantes, bool considerer_transfert){
     int dist_transfert = 0;

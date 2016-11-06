@@ -306,6 +306,7 @@ throw (std::logic_error){
     return information[numDest].first;
 }
 
+
 /**
  * \brief obtenir la composantes fortements connexes
  *
@@ -313,6 +314,7 @@ throw (std::logic_error){
  *
  * \return la taille de composante.
  */
+
 int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const{
     Reseau sommet_inverse;
 
@@ -376,4 +378,8 @@ void Reseau::assigne(unsigned int sommet, std::unordered_map< unsigned int, list
             assigne(it->first, grapheInverse, dejaVisite, composanteTemporaire);
         }
     }
+
 }
+
+
+

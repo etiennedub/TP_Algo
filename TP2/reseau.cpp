@@ -306,13 +306,16 @@ throw (std::logic_error){
     return information[numDest].first;
 }
 
-int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const {
+int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const{
     Reseau sommet_inverse;
+
+    std::set<unsigned int> dejaVisite;
     std::vector<unsigned int> pile;
-    std::set<unsigned int> nonVisite;
+    std::vector<unsigned int> composanteTemporaire;
 
     for (auto itSommet = m_sommets.begin(); itSommet != m_sommets.end(); ++itSommet) {
-        nonVisite.insert(itSommet->first);
+        sommet_inverse.ajouterSommet(itSommet->first);
+        visite(itSommet->first, dejaVisite, pile);
         for (auto itArc = itSommet->second.begin(); itArc != itSommet->second.end(); ++itArc) {
             // inverse sommet
             sommet_inverse.ajouterSommet(itArc->first);
@@ -320,44 +323,44 @@ int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int
         }
     }
 
-    // Graphe initiale
-    int  indexSommetPile = 0; // debut de la pile
-    while (m_sommets.size() != pile.size()) {
-        pile.push_back(m_sommets.find((*nonVisite.begin()))->first);
-        for (; indexSommetPile != pile.size() ;indexSommetPile++){
-            liste_arcs arcsSuivant = m_sommets.find(pile[indexSommetPile])->second;
-            for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
-                if (nonVisite.find(it->first) != nonVisite.end()) {
-                    pile.push_back(it->first);
-                    nonVisite.erase(it->first);
-                }
-            }
+    dejaVisite.clear();
+    std::vector<unsigned int> vide;
+    for (auto itSommet = pile.begin(); itSommet != pile.end(); ++itSommet) {
+        assigne((*itSommet), sommet_inverse.m_sommets, dejaVisite, composanteTemporaire);
+        if(composanteTemporaire != vide){
+            composantes.push_back(composanteTemporaire);
         }
+        composanteTemporaire = vide;
     }
-
-    // Graphe inverse
-    std::vector<unsigned int> nouvellePile;
-    int indexComposante;
-    while (!pile.empty()) {
-        int ajouter = (*(pile.begin()));
-        nouvellePile.push_back(m_sommets.find(ajouter)->first);
-        for (auto it = nouvellePile.begin(); it != nouvellePile.end() ;++it){
-            ajouter = (*it);
-            std::cout << ajouter;
-            liste_arcs arcsSuivant = sommet_inverse.m_sommets.find(ajouter)->second;
-            for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
-                nouvellePile.push_back(it->first);
-            }
-            pile.erase(std::remove(pile.begin(), pile.end(), (*it)), pile.end());
-        }
-        composantes[indexComposante] = nouvellePile;
-        nouvellePile.clear();
-        indexComposante += 1;
-    }
+    return composantes.size();
 }
 
 
 bool Reseau::estFortementConnexe() const{
     std::vector<std::vector<unsigned int> > composantes;
     return (this->getComposantesFortementConnexes(composantes) == 1);
+}
+
+
+void Reseau::visite(unsigned int sommet, std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &pile) const{
+    if (dejaVisite.find(sommet) == dejaVisite.end()){
+        dejaVisite.insert(sommet);
+        liste_arcs arcsSuivant = m_sommets.find(sommet)->second;
+        for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
+            visite(it->first, dejaVisite, pile);
+        }
+        pile.push_back(sommet);
+    }
+}
+
+void Reseau::assigne(unsigned int sommet, std::unordered_map< unsigned int, liste_arcs> grapheInverse,
+                     std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &composanteTemporaire) const{
+    if (dejaVisite.find(sommet) == dejaVisite.end()){
+        dejaVisite.insert(sommet);
+        composanteTemporaire.push_back(sommet);
+        liste_arcs arcsSuivant = grapheInverse.find(sommet)->second;
+        for(auto it = arcsSuivant.begin(); it != arcsSuivant.end(); ++it){
+            assigne(it->first, grapheInverse, dejaVisite, composanteTemporaire);
+        }
+    }
 }

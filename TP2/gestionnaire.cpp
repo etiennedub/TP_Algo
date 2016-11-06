@@ -110,6 +110,9 @@ Gestionnaire::Gestionnaire(std::string chemin_dossier) {
     }
 }
 
+/**
+ * \brief destructeur de la class Gestionnaire.
+ */
 Gestionnaire::~Gestionnaire(){
     for(auto it = m_lignes.begin(); it != m_lignes.end(); ++it){
         delete it->second.first;
@@ -158,7 +161,7 @@ chargées dans le constructeur.
 * \return True ssi la station est prise en charge
 */
 bool Gestionnaire::station_existe(int station_id){
-		return (m_stations.count(station_id) >0 );
+		return (m_stations.find(station_id) != m_stations.end());
 }
 
 /*!
@@ -227,7 +230,7 @@ std::pair<std::string, std::string> Gestionnaire::get_bus_destinations(int stati
     return resultat;
 }
 
-/*
+/*!
 * \brief Trouver des stations environnantes étant donnée une coordonnée gps et un rayon
 * \param coord: Coordonnée gps d'intérêt
 * \param rayon: cette distance défini la circonférence a l'intérieure de laquelle on se trouve
@@ -371,4 +374,21 @@ void Gestionnaire::initialiser_reseau(Date date, Heure heure_depart, Heure heure
         double cout = (itStation->first / vitesse_de_marche) * 3600;
         m_reseau.ajouterArc(itStation->second->getId(), 1, cout);
     }
+}
+
+bool Gestionnaire::reseau_est_fortement_connexe(Date date, Heure heure_debut, bool considerer_transfert){
+    int dist_transfert = 0;
+    if (considerer_transfert) dist_transfert = INFINI;
+    initialiser_reseau(date, heure_debut, Heure(29,59,59), Coordonnees(46.760074, -71.319867),
+                       Coordonnees(46.778398, -71.2685), INFINI, dist_transfert);
+    return m_reseau.estFortementConnexe();
+}
+
+void Gestionnaire::composantes_fortement_connexes(Date date, Heure heure_debut,
+                                    std::vector< std::vector<unsigned int> >& composantes, bool considerer_transfert){
+    int dist_transfert = 0;
+    if (considerer_transfert) dist_transfert = INFINI;
+    initialiser_reseau(date, heure_debut, Heure(29,59,59), Coordonnees(46.760074, -71.319867),
+                       Coordonnees(46.778398, -71.2685), INFINI, dist_transfert);
+    m_reseau.getComposantesFortementConnexes(composantes);
 }

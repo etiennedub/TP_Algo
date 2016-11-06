@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <vector>
+#include <set>
 #include <unordered_map>
 
 #ifndef Reseau__H
@@ -53,9 +54,15 @@ public:
     // égal au nombre de composantes fortement connexe
 	int getComposantesFortementConnexes(std::vector<std::vector<unsigned int> > & composantes) const;
 
+
 private:
     // Vector des sommets qui contient les arcs sortant
     std::unordered_map< unsigned int, liste_arcs> m_sommets;
+
+    void visite(unsigned int sommet, std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &pile) const;
+    void assigne(unsigned int sommet, std::unordered_map< unsigned int, liste_arcs> grapheInverse,
+                 std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &composanteTemporaire) const;
+
 
 };
 

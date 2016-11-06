@@ -356,6 +356,14 @@ bool Reseau::estFortementConnexe() const{
     return (this->getComposantesFortementConnexes(composantes) == 1);
 }
 
+/**
+ * \brief Fonction recursive qui fait un parcour en profondeur et ajoute a la pile
+ *
+ *\param sommet: sommet à visiter
+ *\param dejaVisite: set des sommets deja visiter
+ * \param pile : pile de l'ordre des visite
+ *
+ */
 
 void Reseau::visite(unsigned int sommet, std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &pile) const{
     if (dejaVisite.find(sommet) == dejaVisite.end()){
@@ -368,6 +376,15 @@ void Reseau::visite(unsigned int sommet, std::set<unsigned int> &dejaVisite, std
     }
 }
 
+/**
+ * \brief Fonction recursive qui fait un parcour en profondeur pour trouver composante connexe
+ *
+ *\param sommet: sommet à visiter
+ *\param grapheInverse : graphe à utiliser
+ *\param dejaVisite: set des sommets deja visiter
+ *\param composanteTemporaire : ajout a composante si connexe
+ *
+ */
 void Reseau::assigne(unsigned int sommet, std::unordered_map< unsigned int, liste_arcs> grapheInverse,
                      std::set<unsigned int> &dejaVisite, std::vector<unsigned int> &composanteTemporaire) const{
     if (dejaVisite.find(sommet) == dejaVisite.end()){

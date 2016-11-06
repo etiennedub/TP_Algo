@@ -202,7 +202,7 @@ int Reseau::getTypeArc(unsigned int numOrigine, unsigned int numDestination) con
  *
  * \param numOrigine: le numéro d'origine de l'arc.
  * \param numDest: le numéro de la destination de l'arc.
- *\param vector chemin: vecteur o
+ *\param vector chemin: vecteur de sommet
  * \exception logic_error: lorsque le sommet n'existe pas.
  *
  * \return sommets.
@@ -255,6 +255,16 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
     }
 }
 
+/**
+ * \brief algorithmes de bellmanford.
+ *
+ * \param numOrigine: le numéro d'origine de l'arc.
+ * \param numDest: le numéro de la destination de l'arc.
+ *\param vector chemin: vecteur de sommet
+ * \exception logic_error: lorsque le sommet n'existe pas.
+ *
+ * \return sommets.
+ */
 int Reseau::bellmanFord(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin)
 throw (std::logic_error){
     bool relachement;

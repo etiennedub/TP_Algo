@@ -334,7 +334,7 @@ int Reseau::getComposantesFortementConnexes(std::vector<std::vector<unsigned int
 
     dejaVisite.clear();
     std::vector<unsigned int> vide;
-    for (auto itSommet = pile.begin(); itSommet != pile.end(); ++itSommet) {
+    for (auto itSommet = pile.end() - 1; itSommet != pile.begin(); --itSommet) {
         assigne((*itSommet), sommet_inverse.m_sommets, dejaVisite, composanteTemporaire);
         if(composanteTemporaire != vide){
             composantes.push_back(composanteTemporaire);

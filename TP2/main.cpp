@@ -319,7 +319,6 @@ int main(){
             std::cout << "le réseau n'est pas fortement connexe." << std::endl;
         }
 
-
     }
 
 }

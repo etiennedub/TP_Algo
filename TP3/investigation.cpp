@@ -182,7 +182,9 @@ double GestionnaireInvestigation::tester_n_paires_dijsktra(unsigned int nb_paire
 				throw std::logic_error("gettimeofday() a échoué");
 
 		std::vector<unsigned int> chemin;
-		m_reseau.dijkstra(v[j], v[k], chemin);
+        int numStart = v[j];
+        int numStop = v[k];
+		m_reseau.dijkstra(numStart, numStop, chemin);
 
 		if (gettimeofday(&tv2, 0) != 0)
 				throw std::logic_error("gettimeofday() a échoué");
@@ -231,6 +233,43 @@ double GestionnaireInvestigation::tester_n_paires_bellman(unsigned int nb_paires
 	return total/(1.0*nb_paires);
 }
 
+/*!
+ */
+double GestionnaireInvestigation::tester_n_paires_best(unsigned int nb_paires, unsigned int seed){
+    /* initialize random seed: */
+    srand (seed);
+    double total = 0;
+    unsigned int i =0;
+
+    std::vector<unsigned int > v;
+
+    for(auto st1: stations){
+        v.push_back(st1.first);
+    }
+
+
+    while(i < nb_paires){
+        timeval tv1, tv2;
+        int k = rand() % v.size();
+        int j = rand() % v.size();
+
+
+        if (gettimeofday(&tv1, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+
+        std::vector<unsigned int> chemin;
+        int numStart = v[j];
+        int numStop = v[k];
+        m_reseau.meilleurPlusCourtChemin(numStart, numStop, chemin);
+
+        if (gettimeofday(&tv2, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        total = total + tempsExecution(tv1, tv2);
+        //std::cout << i << ": " << tempsExecution(tv1, tv2) << std::endl;
+        i++;
+    }
+    return total/(1.0*nb_paires);
+}
 /*!
  * \brief inialiser ou réinitialiser l'attribut m_reseau en fonction des paramètres.
  * On ajoute des arêtes à tous les endroits empruntées par les bus dans le réseau.

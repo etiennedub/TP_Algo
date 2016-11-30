@@ -39,8 +39,10 @@ public:
 	std::vector< unsigned int > plus_court_chemin_bellman(unsigned int num_station_depart, unsigned int num_station_dest);
 	double tester_n_paires_dijsktra(unsigned int nb_paires, unsigned int seed=42);
 	double tester_n_paires_bellman(unsigned int nb_paires, unsigned int seed=42);
+    double tester_n_paires_best(unsigned int nb_paires, unsigned int seed=42);
 
-private:
+
+        private:
 	std::unordered_map<std::string, Ligne> lignes;
 	std::unordered_map<unsigned int, Station> stations;
 	std::unordered_map<std::string, Voyage> voyages;

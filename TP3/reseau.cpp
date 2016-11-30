@@ -1,4 +1,5 @@
 #include "reseau.h"
+#include "fibonacci.hpp"
 
 /*!
  * \brief constructeur par défaut d'un réseau. Crée un réseau vide.
@@ -200,6 +201,7 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
     	if(noeud_min == numDest){
     		break;
     	}
+        //std::cout << noeud_min << " : " << distances[noeud_min] << std::endl;
 
     	for(auto voisin: m_arcs[noeud_min]){
     		if(Q.count(voisin.first) != 0){
@@ -224,6 +226,7 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
 			chemin.push_back(chemin_inverse[i]);
 		}
     }
+
     return distances[numDest];
 }
 
@@ -237,8 +240,70 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
  */
 int Reseau::meilleurPlusCourtChemin(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin) throw (std::logic_error)
 {
-    //TODO À completer
-	return 0;
+    if ( !sommetExiste(numOrigine) || !sommetExiste(numDest) ) throw std::logic_error ("dijkstra: Un des sommets n'existe pas!");
+    std::unordered_map<int, node<int>*> nodeMap;
+    std::unordered_map<int, int> distances;
+    std::unordered_map<int, int> predecesseurs;
+    FibonacciHeap<int> myHeap;
+    myHeap.insert(numOrigine, 0);
+    int distanceCourant = 0;
+    predecesseurs[numOrigine] = -1;
+
+    while (true) {
+        node<int> *nodeCourant = myHeap.getMinPtr();
+        distanceCourant = myHeap.removeMinimum();
+        int numCourant = nodeCourant->getKey();
+        if (nodeMap.find(numCourant) != nodeMap.end()) {
+            nodeMap.erase(numCourant);
+        }
+        //chemin.push_back(numCourant);
+        if (numCourant == numDest) {
+            break;
+        }
+        //std::cout << numCourant << " : " << distanceCourant << std::endl;
+
+        for (auto voisin: m_arcs[numCourant]) {
+            int numNext = voisin.first;
+            if (distances.find(numNext) != distances.end()) {
+                int ancienneDistance = distances.find(numNext)->second;
+                int nouvelleDistance = voisin.second.first + distanceCourant;
+                if (nouvelleDistance < ancienneDistance) {
+                    if (nodeMap.find(numNext) == nodeMap.end()) {
+                        node<int> *nodeNouveau = myHeap.insert(numNext, nouvelleDistance);
+                        nodeMap[numNext] = nodeNouveau;
+                        distances[numNext] = nouvelleDistance;
+                        predecesseurs[numNext] = numCourant;
+                    } else {
+                        myHeap.decreaseKey((nodeMap.find(numNext)->second), nouvelleDistance);
+                        distances[numNext] = nouvelleDistance;
+                        predecesseurs[numNext] = numCourant;
+                    }
+                }
+            } else {
+                int nouvelleDistance = voisin.second.first + distanceCourant;
+                node<int> *nodeNouveau = myHeap.insert(numNext, nouvelleDistance);
+                nodeMap[numNext] = nodeNouveau;
+                distances[numNext] = nouvelleDistance;
+                predecesseurs[numNext] = numCourant;
+                }
+            }
+        }
+
+//    chemin.clear();
+//    if(predecesseurs[numDest] != -1){
+//        std::vector<unsigned int> chemin_inverse;
+//        int courant = numDest;
+//        while(courant!=-1){
+//            chemin_inverse.push_back(courant);
+//            courant = predecesseurs[courant];
+//            std::cout << "courant : " << courant << std::endl;
+//        }
+//        for(int i=chemin_inverse.size() -1; i >= 0; i--){
+//            chemin.push_back(chemin_inverse[i]);
+//        }
+//    }
+
+    return distanceCourant;
 }
 
 /*!

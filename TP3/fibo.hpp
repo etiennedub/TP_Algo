@@ -69,6 +69,14 @@ public:
     Noeud<E,A> * ajouter(A p_id, E p_valeur)
     {
     	Noeud<E,A>* ptr = new Noeud(p_id, p_valeur);
+		ptr->m_precedent = nullptr;
+		ptr->m_suivant = nullptr;
+		ptr->m_enfant = nullptr;
+		ptr->m_parent = nullptr;
+		ptr->m_degree = 0;
+		ptr->m_marked = false;
+		ptr->m_id = p_id;
+		ptr->m_valeur = p_valeur;
     	m_ptrMin = merge(m_ptrMin, ptr);
     	return ptr;
     }

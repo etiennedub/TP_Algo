@@ -65,10 +65,6 @@ public:
 		heap=_merge(heap,ret);
 		return ret;
 	}
-	void merge(FibonacciHeap& other) {
-		heap=_merge(heap,other.heap);
-		other.heap=_empty();
-	}
 
 	bool isEmpty() {
 		return heap==NULL;
@@ -90,9 +86,6 @@ public:
 		heap=_decreaseKey(heap,n,value);
 	}
 
-	node<V>* find(V value) {
-		return _find(heap,value);
-	}
 
 	node<V>* getMinPtr() {
 		return heap;
@@ -245,15 +238,4 @@ private:
 		return heap;
 	}
 
-	node<V>* _find(node<V>* heap,V value) {
-		node<V>* n=heap;
-		if(n==NULL)return NULL;
-		do {
-			if(n->value==value)return n;
-			node<V>* ret=_find(n->child,value);
-			if(ret)return ret;
-			n=n->next;
-		}while(n!=heap);
-		return NULL;
-	}
 };

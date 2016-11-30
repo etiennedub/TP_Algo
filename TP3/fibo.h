@@ -12,7 +12,7 @@
      *
      *  La classe représente un noeud typique
      */
-template<typename E, typename A> class Noeud {
+template<typename E, typename A> class Noeud<E, A> {
 public:
     /**
      * \brief Constructeur de la classe Noeud
@@ -22,7 +22,7 @@ public:
      */
     Noeud(const A & p_id, const E & p_valeur) :
             m_valeur(p_valeur), m_enfant(nullptr), m_parent(nullptr), m_id(p_id)
-            , m_degree(0), m_marked(false){}
+            , m_degree(0), m_marked(false), m_suivant(nullptr), m_precedent(nullptr){}
     /**
      * \brief Accesseur de l'ID
      * \return m_id
@@ -37,6 +37,8 @@ private:
     friend class Fibo;
     A m_id; /*!< ID de la station */
     E m_valeur; /*!< La donnée dans l'arbre*/
+    Noeud * m_suivant; /*!< Pointeur du noeud suivant */
+    Noeud * m_precedent; /*!< Pointeur du noeud precedent */
     Noeud * m_enfant; /*!< Pointeur du noeud enfant */
     Noeud * m_parent; /*!< Pointeur du noeud parent */
     int m_degree; /*!< la valeur du degree */
@@ -77,6 +79,8 @@ public:
 private:
     Noeud * m_ptrMin; /*!< Pointeur sur le noeud minimal */
 
+    void supprimerTous(Noeud * p_noeud);
+    Noeud * merge(Noeud * a, Noeud * b);
 };
 
 

@@ -46,7 +46,7 @@ public:
 	 */
     Fibo()
 	{
-    	m_ptrMin = nullptr;
+    	monceau = nullptr;
 	}
 
     /**
@@ -55,8 +55,8 @@ public:
      */
    ~Fibo()
    {
-	   if (m_ptrMin != nullptr){
-	           supprimerTous(m_ptrMin);
+	   if (monceau != nullptr){
+	           supprimerTous(monceau);
 	       }
    }
 
@@ -68,7 +68,7 @@ public:
 	 */
     Noeud<E,A> * ajouter(A p_id, E p_valeur)
     {
-    	Noeud<E,A>* ptr = new Noeud(p_id, p_valeur);
+    	Noeud<E,A>* ptr = new Noeud<E,A>;
 		ptr->m_precedent = nullptr;
 		ptr->m_suivant = nullptr;
 		ptr->m_enfant = nullptr;
@@ -77,7 +77,7 @@ public:
 		ptr->m_marked = false;
 		ptr->m_id = p_id;
 		ptr->m_valeur = p_valeur;
-    	m_ptrMin = merge(m_ptrMin, ptr);
+    	monceau = merge(monceau, ptr);
     	return ptr;
     }
 
@@ -101,7 +101,6 @@ public:
 
    }
 private:
-   Noeud<E,A>* m_ptrMin; /*!< Pointeur sur le noeud minimal */
 
    void supprimerTous(Noeud * p_noeud)
    {

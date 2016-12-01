@@ -61,6 +61,15 @@ public:
    }
 
    /**
+    * \brief Permet de savoir si le monceau est vide
+    * \return un bool dit dit si le monceau est vide
+    */
+   bool estVide()
+   {
+	   return monceau == nullptr;
+   }
+
+   /**
 	 * \brief Permet d'ajouter un noeud
 	 * \param p_id est l'ID de la station
 	 * \param p_valeur est la distance (utlisé pour le tri)
@@ -87,7 +96,11 @@ public:
 	 */
     E supprimerMin()
     {
-
+    	Noeud<E,A>* n = monceau;
+    	monceau = extraireMin(monceau);
+    	E val = n->m_valeur;
+    	delete n;
+    	return val;
     }
 
     /**
@@ -96,10 +109,35 @@ public:
 	 * \param p_valeur est la nouvelle valeur du noeud
 	 * \pre p_valeur > p_noeud->m_valeur
 	 */
-   void diminuer(Noeud * p_noeud, E p_valeur)
+   void diminuer(Noeud<E,A>* p_noeud, E p_valeur)
    {
+	   if(p_noeud->m_valeur < p_valeur)
+	   {
+		   return;
+	   }
 
+	   p_noeud->m_valeur = p_valeur;
+
+	   if(p_noeud->m_valeur < p_noeud->parent->m_valeur)
+	   {
+		   monceau = cut(monceau,p_noeud);
+		   Noeud<E,A>* parent = p_noeud->m_parent;
+		   p_noeud->parent = nullptr;
+		   while(parent != nullptr && parent->m_marked)
+		   {
+			   monceau = cut(monceau,parent);
+			   p_noeud = parent;
+			   parent = p_noeud->m_parent;
+			   p_noeud->m_parent = nullptr;
+		   }
+
+		   if(parent != nullptr && parent->m_parent != nullptr)
+		   {
+			   parent->marked = true;
+		   }
+	   }
    }
+
 private:
 
    void supprimerTous(Noeud * p_noeud)
@@ -137,6 +175,124 @@ private:
 	    bPrecedent->m_suivant = aSuivant;
 
 	    return a;
+   }
+
+   void ajouterEnfant(Noeud<E,A>* parent, Noeud<E,A>* enfant)
+   {
+	   enfant->m_precedent=enfant->m_suivant=enfant;
+	   enfant->m_parent=parent;
+	   parent->m_degree++;
+	   parent->m_enfant = merge(parent->m_enfant, enfant);
+   }
+
+   void retirerMarquesEtParenté(Noeud<E,A>* n)
+   {
+	   if(n == nullptr)
+	   {
+		   return;
+	   }
+	   else
+	   {
+		   Noeud<E,A>* temp = n;
+		   do{
+			   temp->m_marked = false;
+			   temp->m_parent = nullptr;
+			   temp = temp->m_suivant;
+		   }while(temp != n);
+	   }
+   }
+
+   Noeud<E,A>* extraireMin(Noeud<E,A>* n)
+   {
+	  retirerMarquesEtParenté(n->m_enfant);
+
+	  if(n->m_suivant == n)
+	  {
+		  n = n->m_enfant;
+	  }
+	  else
+	  {
+		  n->m_suivant->m_precedent = n->m_precedent;
+		  n->m_precedent->m_suivant = n->m_suivant;
+		  n = merge(n->m_suivant,n->m_enfant);
+	  }
+
+	  if(n == nullptr)
+	  {
+		  return n;
+	  }
+
+	  Noeud<E,A>* trees[64]={nullptr};
+	  while(true)
+	  {
+		  if(trees[n->m_degree]!=nullptr)
+		  {
+			  Noeud<E,A>* t=trees[n->m_degree];
+			  if(t==n)break;
+			  trees[n->m_degree]=nullptr;
+			  if(n->m_valeur<t->valeur)
+			  {
+				  t->m_precedent->m_suivant=t->m_suivant;
+				  t->m_suivant->m_precedent=t->m_precedent;
+				  ajouterEnfant(n,t);
+			  }
+			  else
+			  {
+				  t->m_precedent->m_suivant=t->m_suivant;
+				  t->m_suivant->m_precedent=t->m_precedent;
+				  if(n->m_suivant==n)
+				  {
+					  t->m_suivant=t->m_precedent=t;
+					  ajouterEnfant(t,n);
+					  n=t;
+				  }
+				  else
+				  {
+					  n->m_precedent->m_suivant=t;
+					  n->m_suivant->m_precedent=t;
+					  t->m_suivant=n->m_suivant;
+					  t->m_precendent=n->m_precedent;
+					  ajouterEnfant(t,n);
+					  n=t;
+				  }
+			  }
+			  continue;
+		  }
+		  else
+		  {
+			  trees[n->m_degree]=n;
+		  }
+		  n=n->m_suivant;
+	  }
+	  Noeud<E,A>* min=n;
+	  do
+	  {
+		  if(n->m_valeur<min->m_valeur)
+		  {
+			  min=n;
+		  }
+		  n=n->next;
+	  } while(n!=n);
+
+	  return min;
+   }
+
+   Noeud<E,A>* cut(Noeud<E,A>* monceau, Noeud<E,A>* n)
+   {
+	   if(n->m_suivant==n)
+	   {
+		   n->m_parent->m_enfant = nullptr;
+	   }
+	   else
+	   {
+		   n->m_suivant->m_precedent = n->m_precedent;
+		   n->m_precedent->m_suivant = n->m_suivant;
+		   n->parent->child = n->m_suivant;
+	   }
+
+	   n->m_suivant = n->m_precedent = n;
+	   n->m_marked = false;
+	   return merge(monceau,n);
    }
 };
 

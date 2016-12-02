@@ -78,8 +78,8 @@ public:
     Noeud<E,A> * ajouter(A p_id, E p_valeur)
     {
     	Noeud<E,A>* ptr = new Noeud<E,A>;
-		ptr->m_precedent = nullptr;
-		ptr->m_suivant = nullptr;
+		ptr->m_precedent = ptr;
+		ptr->m_suivant = ptr;
 		ptr->m_enfant = nullptr;
 		ptr->m_parent = nullptr;
 		ptr->m_degree = 0;
@@ -215,8 +215,7 @@ private:
 	  {
 		  n = n->m_enfant;
 	  }
-	  else
-	  {
+	  else{
 		  n->m_suivant->m_precedent = n->m_precedent;
 		  n->m_precedent->m_suivant = n->m_suivant;
 		  n = merge(n->m_suivant,n->m_enfant);

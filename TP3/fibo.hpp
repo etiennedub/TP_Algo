@@ -122,6 +122,7 @@ public:
 	   }
 
 	   p_noeud->m_valeur = p_valeur;
+       if(p_noeud->m_parent == nullptr) return;
 
 	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
 	   {

@@ -184,6 +184,7 @@ double GestionnaireInvestigation::tester_n_paires_dijsktra(unsigned int nb_paire
 		std::vector<unsigned int> chemin;
         int numStart = v[j];
         int numStop = v[k];
+        std::cout << "Depart : " << v[j] << " | Arrive : " << v[k] << std::endl;
 		m_reseau.dijkstra(numStart, numStop, chemin);
 
 		if (gettimeofday(&tv2, 0) != 0)
@@ -222,6 +223,7 @@ double GestionnaireInvestigation::tester_n_paires_bellman(unsigned int nb_paires
 				throw std::logic_error("gettimeofday() a échoué");
 
 		std::vector<unsigned int> chemin;
+        std::cout << "Depart : " << v[j] << " | Arrive : " << v[k] << std::endl;
 		m_reseau.bellmanFord(v[j], v[k], chemin);
 
 		if (gettimeofday(&tv2, 0) != 0)
@@ -260,6 +262,7 @@ double GestionnaireInvestigation::tester_n_paires_best(unsigned int nb_paires, u
         std::vector<unsigned int> chemin;
         int numStart = v[j];
         int numStop = v[k];
+        std::cout << "Depart : " << numStart << " | Arrive : " << numStop << std::endl;
         m_reseau.meilleurPlusCourtChemin(numStart, numStop, chemin);
 
         if (gettimeofday(&tv2, 0) != 0)

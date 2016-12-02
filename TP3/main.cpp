@@ -34,10 +34,9 @@ void testReseau(){
 }
 int main() {
     testReseau();
-   GestionnaireInvestigation rtc("RTC");
-
-//    cout << "Temps moyen de dijsktra " << rtc.tester_n_paires_dijsktra(10) << endl;
-//    cout << "Temps moyen de bellman " << rtc.tester_n_paires_bellman(10) << endl;
-   cout << "Temps moyen de meilleur " << rtc.tester_n_paires_best(10) << endl;
+//    GestionnaireInvestigation rtc("RTC");
+//    cout << "Temps moyen de dijsktra " << rtc.tester_n_paires_dijsktra(20) << endl;
+//    cout << "Temps moyen de bellman " << rtc.tester_n_paires_bellman(20) << endl;
+//    cout << "Temps moyen de meilleur " << rtc.tester_n_paires_best(20) << endl;
     return 0;
 }

@@ -1,5 +1,4 @@
 #include "reseau.h"
-#include "fibonacci.hpp"
 
 /*!
  * \brief constructeur par défaut d'un réseau. Crée un réseau vide.
@@ -201,7 +200,6 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
     	if(noeud_min == numDest){
     		break;
     	}
-        //std::cout << noeud_min << " : " << distances[noeud_min] << std::endl;
 
     	for(auto voisin: m_arcs[noeud_min]){
     		if(Q.count(voisin.first) != 0){
@@ -238,71 +236,65 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
  * \exception logic_error si un des sommets n'existe pas
  * \return la longueur du chemin (= numeric_limits<int>::max() si p_destination n'est pas atteignable)
  */
-int Reseau::meilleurPlusCourtChemin(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin) throw (std::logic_error)
-{
+int Reseau::meilleurPlusCourtChemin(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin)
+throw (std::logic_error) {
     if ( !sommetExiste(numOrigine) || !sommetExiste(numDest) ) throw std::logic_error ("dijkstra: Un des sommets n'existe pas!");
-    std::unordered_map<int, node<int>*> nodeMap;
+    std::unordered_map<int, Noeud<int ,int>*> noeudMap;
     std::unordered_map<int, int> distances;
     std::unordered_map<int, int> predecesseurs;
-    FibonacciHeap<int> myHeap;
-    myHeap.insert(numOrigine, 0);
+    Fibo<int, int> myHeap;
+    myHeap.ajouter(numOrigine, 0);
     int distanceCourant = 0;
-    predecesseurs[numOrigine] = -1;
 
     while (true) {
-        node<int> *nodeCourant = myHeap.getMinPtr();
-        distanceCourant = myHeap.removeMinimum();
+        Noeud<int ,int>* nodeCourant = myHeap.getMin();
         int numCourant = nodeCourant->getKey();
-        if (nodeMap.find(numCourant) != nodeMap.end()) {
-            nodeMap.erase(numCourant);
+        distanceCourant = myHeap.supprimerMin();
+        if (noeudMap.find(numCourant) != noeudMap.end()) {
+            noeudMap.erase(numCourant);
         }
-        //chemin.push_back(numCourant);
         if (numCourant == numDest) {
             break;
         }
-        //std::cout << numCourant << " : " << distanceCourant << std::endl;
-
         for (auto voisin: m_arcs[numCourant]) {
             int numNext = voisin.first;
             if (distances.find(numNext) != distances.end()) {
                 int ancienneDistance = distances.find(numNext)->second;
                 int nouvelleDistance = voisin.second.first + distanceCourant;
                 if (nouvelleDistance < ancienneDistance) {
-                    if (nodeMap.find(numNext) == nodeMap.end()) {
-                        node<int> *nodeNouveau = myHeap.insert(numNext, nouvelleDistance);
-                        nodeMap[numNext] = nodeNouveau;
+                    if (noeudMap.find(numNext) == noeudMap.end()) {
+                        Noeud<int, int>* nodeNouveau = myHeap.ajouter(numNext, nouvelleDistance);
+                        noeudMap[numNext] = nodeNouveau;
                         distances[numNext] = nouvelleDistance;
                         predecesseurs[numNext] = numCourant;
                     } else {
-                        myHeap.decreaseKey((nodeMap.find(numNext)->second), nouvelleDistance);
+                        myHeap.diminuer((noeudMap.find(numNext)->second), nouvelleDistance);
                         distances[numNext] = nouvelleDistance;
                         predecesseurs[numNext] = numCourant;
                     }
                 }
             } else {
                 int nouvelleDistance = voisin.second.first + distanceCourant;
-                node<int> *nodeNouveau = myHeap.insert(numNext, nouvelleDistance);
-                nodeMap[numNext] = nodeNouveau;
+                Noeud<int, int> * nodeNouveau = myHeap.ajouter(numNext, nouvelleDistance);
+                noeudMap[numNext] = nodeNouveau;
                 distances[numNext] = nouvelleDistance;
                 predecesseurs[numNext] = numCourant;
                 }
             }
         }
 
-//    chemin.clear();
-//    if(predecesseurs[numDest] != -1){
-//        std::vector<unsigned int> chemin_inverse;
-//        int courant = numDest;
-//        while(courant!=-1){
-//            chemin_inverse.push_back(courant);
-//            courant = predecesseurs[courant];
-//            std::cout << "courant : " << courant << std::endl;
-//        }
-//        for(int i=chemin_inverse.size() -1; i >= 0; i--){
-//            chemin.push_back(chemin_inverse[i]);
-//        }
-//    }
-
+    chemin.clear();
+    int precedent = predecesseurs[numDest];
+    std::vector<unsigned int> chemin_inverse;
+    chemin_inverse.push_back(numDest);
+    while(precedent != numOrigine){
+        chemin_inverse.push_back(precedent);
+        precedent = predecesseurs[precedent];
+    }
+    chemin_inverse.push_back(numOrigine);
+    for(int i=chemin_inverse.size() - 1; i >= 0; i--){
+        chemin.push_back(chemin_inverse[i]);
+    }
     return distanceCourant;
 }
 

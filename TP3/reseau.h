@@ -12,6 +12,7 @@
 #include <limits>
 #include <algorithm>
 #include "station.h"
+#include "fibo.hpp"
 
 #ifndef Reseau__H
 #define Reseau__H

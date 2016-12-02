@@ -103,6 +103,11 @@ public:
     	return val;
     }
 
+	Noeud<E,A> * getMin()
+	{
+		return monceau;
+	};
+
     /**
 	 * \brief Permet de diminuer la veleur d'un noeud existant
      * \param p_noeud est un pointeur sur le noeud à modifier
@@ -118,11 +123,11 @@ public:
 
 	   p_noeud->m_valeur = p_valeur;
 
-	   if(p_noeud->m_valeur < p_noeud->parent->m_valeur)
+	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
 	   {
 		   monceau = cut(monceau,p_noeud);
 		   Noeud<E,A>* parent = p_noeud->m_parent;
-		   p_noeud->parent = nullptr;
+		   p_noeud->m_parent = nullptr;
 		   while(parent != nullptr && parent->m_marked)
 		   {
 			   monceau = cut(monceau,parent);
@@ -133,14 +138,14 @@ public:
 
 		   if(parent != nullptr && parent->m_parent != nullptr)
 		   {
-			   parent->marked = true;
+			   parent->m_marked = true;
 		   }
 	   }
    }
 
 private:
 
-   void supprimerTous(Noeud * p_noeud)
+   void supprimerTous(Noeud<E,A>* p_noeud)
    {
 	    if( p_noeud != nullptr){
 	        Noeud<E,A>* a = p_noeud;
@@ -162,7 +167,7 @@ private:
 	        return a;
 	    }
 	    if( a->m_valeur > b->m_valeur){ // Inverse a et b
-	        Noeud * tempoPtr = a;
+			Noeud<E,A>* tempoPtr = a;
 	        a = b;
 	        b = tempoPtr;
 	    }
@@ -185,7 +190,7 @@ private:
 	   parent->m_enfant = merge(parent->m_enfant, enfant);
    }
 
-   void retirerMarquesEtParenté(Noeud<E,A>* n)
+   void retirerMarquesEtParente(Noeud<E,A>* n)
    {
 	   if(n == nullptr)
 	   {
@@ -204,7 +209,7 @@ private:
 
    Noeud<E,A>* extraireMin(Noeud<E,A>* n)
    {
-	  retirerMarquesEtParenté(n->m_enfant);
+	  retirerMarquesEtParente(n->m_enfant);
 
 	  if(n->m_suivant == n)
 	  {
@@ -230,7 +235,7 @@ private:
 			  Noeud<E,A>* t=trees[n->m_degree];
 			  if(t==n)break;
 			  trees[n->m_degree]=nullptr;
-			  if(n->m_valeur<t->valeur)
+			  if(n->m_valeur<t->m_valeur)
 			  {
 				  t->m_precedent->m_suivant=t->m_suivant;
 				  t->m_suivant->m_precedent=t->m_precedent;
@@ -251,7 +256,7 @@ private:
 					  n->m_precedent->m_suivant=t;
 					  n->m_suivant->m_precedent=t;
 					  t->m_suivant=n->m_suivant;
-					  t->m_precendent=n->m_precedent;
+					  t->m_precedent=n->m_precedent;
 					  ajouterEnfant(t,n);
 					  n=t;
 				  }
@@ -271,7 +276,7 @@ private:
 		  {
 			  min=n;
 		  }
-		  n=n->next;
+		  n=n->m_suivant;
 	  } while(n!=n);
 
 	  return min;
@@ -287,7 +292,7 @@ private:
 	   {
 		   n->m_suivant->m_precedent = n->m_precedent;
 		   n->m_precedent->m_suivant = n->m_suivant;
-		   n->parent->child = n->m_suivant;
+		   n->m_parent->m_enfant = n->m_suivant;
 	   }
 
 	   n->m_suivant = n->m_precedent = n;

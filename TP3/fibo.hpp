@@ -34,9 +34,6 @@ public:
 };
 
 template <typename E, typename A> class Fibo {
-
-protected:
-	Noeud<E,A>* monceau;
 public:
     /**
 	 * \brief Constructeur de la classe Fibo
@@ -84,7 +81,7 @@ public:
 		ptr->m_marque = false;
 		ptr->m_id = p_id;
 		ptr->m_valeur = p_valeur;
-    	monceau = merge(monceau, ptr);
+    	monceau = unir(monceau, ptr);
     	return ptr;
     }
 
@@ -124,12 +121,12 @@ public:
 
 	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
 	   {
-		   monceau = cut(monceau,p_noeud);
+		   monceau = couper(monceau,p_noeud);
 		   Noeud<E,A>* parent = p_noeud->m_parent;
 		   p_noeud->m_parent = nullptr;
 		   while(parent != nullptr && parent->m_marque)
 		   {
-			   monceau = cut(monceau,parent);
+			   monceau = couper(monceau,parent);
 			   p_noeud = parent;
 			   parent = p_noeud->m_parent;
 			   p_noeud->m_parent = nullptr;
@@ -143,6 +140,7 @@ public:
    }
 
 private:
+   Noeud<E,A>* monceau;
 
    void supprimerTous(Noeud<E,A>* p_noeud)
    {
@@ -157,7 +155,7 @@ private:
 	    }
    }
 
-   Noeud<E,A>* merge(Noeud<E,A> * a, Noeud<E,A> * b)
+   Noeud<E,A>* unir(Noeud<E,A> * a, Noeud<E,A> * b)
    {
 	    if( a == nullptr ){
 	        return b;
@@ -186,7 +184,7 @@ private:
 	   enfant->m_precedent=enfant->m_suivant=enfant;
 	   enfant->m_parent=parent;
 	   parent->m_degree++;
-	   parent->m_enfant = merge(parent->m_enfant, enfant);
+	   parent->m_enfant = unir(parent->m_enfant, enfant);
    }
 
    void retirerMarquesEtParente(Noeud<E,A>* n)
@@ -217,7 +215,7 @@ private:
 	  else{
 		  n->m_suivant->m_precedent = n->m_precedent;
 		  n->m_precedent->m_suivant = n->m_suivant;
-		  n = merge(n->m_suivant,n->m_enfant);
+		  n = unir(n->m_suivant,n->m_enfant);
 	  }
 
 	  if(n == nullptr)
@@ -280,7 +278,7 @@ private:
 	  return min;
    }
 
-   Noeud<E,A>* cut(Noeud<E,A>* monceau, Noeud<E,A>* n)
+   Noeud<E,A>* couper(Noeud<E,A>* monceau, Noeud<E,A>* n)
    {
 	   if(n->m_suivant==n)
 	   {
@@ -295,7 +293,7 @@ private:
 
 	   n->m_suivant = n->m_precedent = n;
 	   n->m_marque = false;
-	   return merge(monceau,n);
+	   return unir(monceau,n);
    }
 };
 

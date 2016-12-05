@@ -19,8 +19,8 @@ private:
     Noeud<E,A>* m_precedent; /*!< Pointeur du noeud precedent */
     Noeud<E,A>* m_enfant; /*!< Pointeur du noeud enfant */
     Noeud<E,A>* m_parent; /*!< Pointeur du noeud parent */
-    int m_degree; /*!< la valeur du degree */
-    bool m_marked; /*!< booleen marked */
+    int m_degree; /*!< le nombre d'enfant */
+    bool m_marque; /*!< boolean marqué */
 public:
     friend class Fibo<E,A>;
 	Noeud<E,A>* getPrecedent() {return m_precedent;}
@@ -29,10 +29,8 @@ public:
 	Noeud<E,A>* getParent() {return m_parent;}
 	E getValue() {return m_valeur;}
 	A getKey() {return m_id;}
-	bool isMarked() {return m_marked;}
+	bool isMarked() {return m_marque;}
 
-	bool hasChildren() {return m_enfant;}
-	bool hasParent() {return m_parent;}
 };
 
 template <typename E, typename A> class Fibo {
@@ -83,7 +81,7 @@ public:
 		ptr->m_enfant = nullptr;
 		ptr->m_parent = nullptr;
 		ptr->m_degree = 0;
-		ptr->m_marked = false;
+		ptr->m_marque = false;
 		ptr->m_id = p_id;
 		ptr->m_valeur = p_valeur;
     	monceau = merge(monceau, ptr);
@@ -129,7 +127,7 @@ public:
 		   monceau = cut(monceau,p_noeud);
 		   Noeud<E,A>* parent = p_noeud->m_parent;
 		   p_noeud->m_parent = nullptr;
-		   while(parent != nullptr && parent->m_marked)
+		   while(parent != nullptr && parent->m_marque)
 		   {
 			   monceau = cut(monceau,parent);
 			   p_noeud = parent;
@@ -139,7 +137,7 @@ public:
 
 		   if(parent != nullptr && parent->m_parent != nullptr)
 		   {
-			   parent->m_marked = true;
+			   parent->m_marque = true;
 		   }
 	   }
    }
@@ -201,7 +199,7 @@ private:
 	   {
 		   Noeud<E,A>* temp = n;
 		   do{
-			   temp->m_marked = false;
+			   temp->m_marque = false;
 			   temp->m_parent = nullptr;
 			   temp = temp->m_suivant;
 		   }while(temp != n);
@@ -296,7 +294,7 @@ private:
 	   }
 
 	   n->m_suivant = n->m_precedent = n;
-	   n->m_marked = false;
+	   n->m_marque = false;
 	   return merge(monceau,n);
    }
 };

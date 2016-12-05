@@ -239,14 +239,18 @@ int Reseau::dijkstra(unsigned int numOrigine, unsigned int numDest, std::vector<
 int Reseau::meilleurPlusCourtChemin(unsigned int numOrigine, unsigned int numDest, std::vector<unsigned int> & chemin)
 throw (std::logic_error) {
     if ( !sommetExiste(numOrigine) || !sommetExiste(numDest) ) throw std::logic_error ("dijkstra: Un des sommets n'existe pas!");
-    std::unordered_map<int, Noeud<int ,int>*> noeudMap;
-    std::unordered_map<int, int> distances;
-    std::unordered_map<int, int> predecesseurs;
+    std::unordered_map<int, Noeud<int ,int>*> noeudMap; // < ID, Ptr Noeud >
+    std::unordered_map<int, int> distances; // < ID , Distance >
+    std::unordered_map<int, int> predecesseurs; // < ID , ID precedent >
+    if (numOrigine == numDest){
+        chemin.clear();
+        return 0;
+    }
     Fibo<int, int> myHeap;
     myHeap.ajouter(numOrigine, 0);
     int distanceCourant = 0;
 
-    while (true) {
+    while (!myHeap.estVide()) {
         Noeud<int ,int>* nodeCourant = myHeap.getMin();
         int numCourant = nodeCourant->getKey();
         distanceCourant = myHeap.supprimerMin();

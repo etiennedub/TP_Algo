@@ -3,18 +3,14 @@
 //
 
 #include "investigation.h"
-
-
 //détermine le temps d'exécution (en microseconde) entre tv2 et tv2
 long tempsExecution(const timeval& tv1, const timeval& tv2) {
-	const long unMillion = 1000000;
-	long dt_usec = tv2.tv_usec - tv1.tv_usec;
-	long dt_sec = tv2.tv_sec - tv1.tv_sec;
-	long dtms = unMillion * dt_sec + dt_usec;
-	return dtms;
+    const long unMillion = 1000000;
+    long dt_usec = tv2.tv_usec - tv1.tv_usec;
+    long dt_sec = tv2.tv_sec - tv1.tv_sec;
+    long dtms = unMillion * dt_sec + dt_usec;
+    return dtms;
 }
-
-
 
 /*!
  * \brief Constructeur de la classe Gestionnaire. C'est ici que vous devez lire et charger les fichiers gtfs utile au tp.
@@ -346,3 +342,149 @@ void GestionnaireInvestigation::ajouter_aretes_transfert(double dist_transfert)
 	}
 }
 
+Reseau reseauAleatoire(int nb_n){
+    int arcMoyen = 4;
+	int sommetDest = 0;
+	Reseau reseauTeste;
+	srand (42);
+	int cout = 0;
+	for (int sommet = 0; sommet < nb_n; sommet++) {
+		reseauTeste.ajouterSommet(sommet);
+	}
+	for (int sommet = 0; sommet < nb_n; sommet++) {
+		for (int i = 0; i < arcMoyen; i++){
+			try {
+				sommetDest = rand() % nb_n;
+				cout = rand() % 10000;
+				reseauTeste.ajouterArc(sommet, sommetDest, cout);
+			}
+			catch(std::logic_error){
+
+			}
+		}
+	}
+	return reseauTeste;
+}
+
+void testeComplexite(unsigned int nb_n){
+	srand (42);
+	std::cout << "n, meilleur, bellman, dijkstra" << std::endl;
+	std::vector<unsigned int> chemin;
+	for (int n = 1; n <= nb_n; n++){
+		Reseau reseauTempo = reseauAleatoire(n);
+		int depart = rand() % n;
+		int destination = rand() % n;
+
+		timeval init_meilleur, finale_meilleur;
+		if (gettimeofday(&init_meilleur, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		reseauTempo.meilleurPlusCourtChemin(depart, destination, chemin);
+		if (gettimeofday(&finale_meilleur, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		long tempsMeilleur = tempsExecution(init_meilleur, finale_meilleur);
+
+		timeval init_bellman, finale_bellman;
+		if (gettimeofday(&init_bellman, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		reseauTempo.bellmanFord(depart, destination, chemin);
+		if (gettimeofday(&finale_bellman, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		long tempsBellman = tempsExecution(init_bellman, finale_bellman);
+
+		timeval init_dijkstra, finale_dijkstra;
+		if (gettimeofday(&init_dijkstra, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		reseauTempo.dijkstra(depart, destination, chemin);
+		if (gettimeofday(&finale_dijkstra, 0) != 0)
+			throw std::logic_error("gettimeofday() a échoué");
+		long tempsDijkstra = tempsExecution(init_dijkstra, finale_dijkstra);
+
+		std::cout << n << "," << tempsMeilleur << "," << tempsBellman << "," << tempsDijkstra << std::endl;
+
+
+	}
+}
+void testeMonceauTous(unsigned int nb_n){
+    // ajouter O(1)
+    // supprimerMin O(log n)
+    // diminuer O(1)
+    // getMin O(1)
+    srand (42);
+    int nombre = 0;
+    std::cout << "n, ajouter(), supprimerMin(), diminuer(), getMin()" << std::endl;
+    for (int n = 1; n < nb_n; n++) {
+        Noeud<int, int> *ptr;
+        int ptrRand = rand() % n;
+        Fibo<int, int> monceau;
+        for (int i = 0; i < n; i++) {
+            nombre = rand() % 1000000;
+            if (ptrRand == i) {
+                ptr = monceau.ajouter(1, nombre);
+            } else {
+                monceau.ajouter(1, nombre);
+            }
+        }
+
+        timeval init_ajouter, finale_ajouter;
+        nombre = rand() % 1000;
+        if (gettimeofday(&init_ajouter, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        monceau.ajouter(1, nombre);
+        if (gettimeofday(&finale_ajouter, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        long tempsAjouter = tempsExecution(init_ajouter, finale_ajouter);
+
+        timeval init_diminuer, finale_diminuer;
+        nombre = rand() % 1000;
+        if (gettimeofday(&init_diminuer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        monceau.diminuer(ptr, nombre);
+        if (gettimeofday(&finale_diminuer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        long tempsDiminuer = tempsExecution(init_diminuer, finale_diminuer);
+
+        timeval init_getMin, finale_getMin;
+        if (gettimeofday(&init_getMin, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        monceau.getMin();
+        if (gettimeofday(&finale_getMin, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        long tempsGetMin = tempsExecution(init_getMin, finale_getMin);
+
+        timeval init_supprimer, finale_supprimer;
+        if (gettimeofday(&init_supprimer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        monceau.supprimerMin();
+        if (gettimeofday(&finale_supprimer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        long tempsSupprimer = tempsExecution(init_supprimer, finale_supprimer);
+
+        std::cout << n << "," << tempsAjouter << "," << tempsSupprimer << "," << tempsDiminuer << "," <<
+                           tempsGetMin << std::endl;
+    }
+}
+
+
+
+void testeMonceauSupprimerMin(unsigned int nb_n) {
+    // supprimerMin O(log n)
+    srand(42);
+    int nombre = 0;
+    std::cout << "n, ajouter(), supprimerMin(), diminuer(), getMin()" << std::endl;
+    Fibo<int, int> monceau;
+    timeval init_supprimer, finale_supprimer;
+    for (int n = 1; n < nb_n; n++) {
+        nombre = rand() % 1000000;
+        monceau.ajouter(1, nombre);
+        if (gettimeofday(&init_supprimer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        monceau.supprimerMin();
+        if (gettimeofday(&finale_supprimer, 0) != 0)
+            throw std::logic_error("gettimeofday() a échoué");
+        long tempsSupprimer = tempsExecution(init_supprimer, finale_supprimer);
+        nombre = rand() % 1000000;
+        monceau.ajouter(1, nombre);
+
+        std::cout << n << "," << tempsSupprimer << std::endl;
+    }
+}

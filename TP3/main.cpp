@@ -4,8 +4,9 @@
 #include <vector>
 #include "investigation.h"
 
-using namespace std;
+#include "fibo.hpp"
 
+using namespace std;
 
 
 void testReseau(){
@@ -32,10 +33,15 @@ void testReseau(){
     monReseau.meilleurPlusCourtChemin(1, 5, chemin);
     cout << "fini" << endl;
 }
+
+
+
 int main() {
-    testReseau();
-//    GestionnaireInvestigation rtc("RTC");
-//    cout << "Temps moyen de dijsktra " << rtc.tester_n_paires_dijsktra(20) << endl;
+    //testReseau();
+    //testeMonceauSupprimerMin(100000);
+    GestionnaireInvestigation rtc("RTC");
+    //testeComplexite(1000);
+   cout << "Temps moyen de dijsktra " << rtc.tester_n_paires_dijsktra(20) << endl;
 //    cout << "Temps moyen de bellman " << rtc.tester_n_paires_bellman(20) << endl;
 //    cout << "Temps moyen de meilleur " << rtc.tester_n_paires_best(20) << endl;
     return 0;

@@ -24,6 +24,10 @@ const double distance_max_transfert = 0.2; // Cette distance est relativement co
 
 enum class MoyenDeplacement {BUS=0, PIEDS};
 
+void testeMonceau(unsigned int nb_teste);
+void testeMonceauSupprimerMin(unsigned int nb_n);
+Reseau reseauAleatoire(unsigned int nb_n);
+void testeComplexite(unsigned int nb_n);
 
 /*!
  * \class Gestionnaire
@@ -42,6 +46,7 @@ public:
     double tester_n_paires_best(unsigned int nb_paires, unsigned int seed=42);
 
 
+
         private:
 	std::unordered_map<std::string, Ligne> lignes;
 	std::unordered_map<unsigned int, Station> stations;
@@ -54,5 +59,6 @@ public:
 
 
 };
+
 
 #endif //RTC_GESTIONNAIRE_H

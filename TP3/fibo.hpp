@@ -23,14 +23,8 @@ private:
     bool m_marque; /*!< boolean marqué */
 public:
     friend class Fibo<E,A>;
-	Noeud<E,A>* getPrecedent() {return m_precedent;}
-	Noeud<E,A>* getSuivant() {return m_suivant;}
-	Noeud<E,A>* getEnfant() {return m_enfant;}
-	Noeud<E,A>* getParent() {return m_parent;}
 	E getValue() {return m_valeur;}
 	A getKey() {return m_id;}
-	bool isMarked() {return m_marque;}
-
 };
 
 template <typename E, typename A> class Fibo {

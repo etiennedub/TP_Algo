@@ -23,14 +23,8 @@ private:
     bool m_marque; /*!< boolean marqué */
 public:
     friend class Fibo<E,A>;
-	Noeud<E,A>* getPrecedent() {return m_precedent;}
-	Noeud<E,A>* getSuivant() {return m_suivant;}
-	Noeud<E,A>* getEnfant() {return m_enfant;}
-	Noeud<E,A>* getParent() {return m_parent;}
 	E getValue() {return m_valeur;}
 	A getKey() {return m_id;}
-	bool isMarked() {return m_marque;}
-
 };
 
 template <typename E, typename A> class Fibo {
@@ -111,27 +105,35 @@ public:
 	 */
    void diminuer(Noeud<E,A>* p_noeud, E p_valeur)
    {
-	   if(p_noeud->m_valeur < p_valeur)
+	   // La valeur doit être plus petite que la valeur du noeud actuelle
+	   if(p_valeur > p_noeud->m_valeur)
 	   {
 		   return;
 	   }
 
 	   p_noeud->m_valeur = p_valeur;
-       if(p_noeud->m_parent == nullptr) return;
+	   Noeud<E,A>* parent = p_noeud->m_parent;
+	   // le noeud est une racine alors rien à faire
+       if(parent == nullptr)
+       {
+    	   return;
+       }
 
-	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
+       // On coupe le noeud de son père si la propriété du tas est violée
+	   if(p_noeud->m_valeur < parent->m_valeur)
 	   {
-		   monceau = couper(monceau,p_noeud);
-		   Noeud<E,A>* parent = p_noeud->m_parent;
-		   p_noeud->m_parent = nullptr;
+		   Noeud<E,A>* n = couper(p_noeud,parent);
+		   monceau = unir(monceau,n);
+		   // si les parents sont marqués on les coupent aussi
 		   while(parent != nullptr && parent->m_marque)
 		   {
-			   monceau = couper(monceau,parent);
 			   p_noeud = parent;
-			   parent = p_noeud->m_parent;
-			   p_noeud->m_parent = nullptr;
+			   Noeud<E,A>* parent = p_noeud->m_parent;
+			   n = couper(p_noeud,parent);
+			   monceau = unir(monceau,n);
 		   }
 
+		   // On marque le noeud parent si nécessaire
 		   if(parent != nullptr && parent->m_parent != nullptr)
 		   {
 			   parent->m_marque = true;
@@ -278,22 +280,24 @@ private:
 	  return min;
    }
 
-   Noeud<E,A>* couper(Noeud<E,A>* monceau, Noeud<E,A>* n)
+   Noeud<E,A>* couper(Noeud<E,A>* e, Noeud<E,A>* p)
    {
-	   if(n->m_suivant==n)
+	   // l'enfant n'a plus de parent il devient donc un noeud racine
+	   if(e->m_suivant==e)
 	   {
-		   n->m_parent->m_enfant = nullptr;
+		   p->m_enfant = nullptr;
 	   }
 	   else
 	   {
-		   n->m_suivant->m_precedent = n->m_precedent;
-		   n->m_precedent->m_suivant = n->m_suivant;
-		   n->m_parent->m_enfant = n->m_suivant;
+		   e->m_suivant->m_precedent = e->m_precedent;
+		   e->m_precedent->m_suivant = e->m_suivant;
+		   p->m_enfant = e->m_suivant;
 	   }
 
-	   n->m_suivant = n->m_precedent = n;
-	   n->m_marque = false;
-	   return unir(monceau,n);
+	   e->m_suivant = e->m_precedent = e; // crée un tas d'un élément soit l'élément coupé
+	   e->m_marque = false;
+	   e->m_parent = nullptr;
+	   return e;
    }
 };
 

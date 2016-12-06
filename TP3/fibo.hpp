@@ -112,23 +112,25 @@ public:
 	   }
 
 	   p_noeud->m_valeur = p_valeur;
+	   Noeud<E,A>* parent = p_noeud->m_parent;
 	   // le noeud est une racine alors rien à faire
-       if(p_noeud->m_parent == nullptr)
+       if(parent == nullptr)
        {
     	   return;
        }
 
        // On coupe le noeud de son père si la propriété du tas est violée
-	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
+	   if(p_noeud->m_valeur < parent->m_valeur)
 	   {
-		   monceau = couper(monceau,p_noeud);
-		   Noeud<E,A>* parent = p_noeud->m_parent;
+		   Noeud<E,A>* n = couper(p_noeud,parent);
+		   monceau = unir(monceau,n);
 		   // si les parents sont marqués on les coupent aussi
 		   while(parent != nullptr && parent->m_marque)
 		   {
-			   monceau = couper(monceau,parent);
 			   p_noeud = parent;
-			   parent = p_noeud->m_parent;
+			   Noeud<E,A>* parent = p_noeud->m_parent;
+			   n = couper(p_noeud,parent);
+			   monceau = unir(monceau,n);
 		   }
 
 		   // On marque le noeud parent si nécessaire
@@ -278,24 +280,24 @@ private:
 	  return min;
    }
 
-   Noeud<E,A>* couper(Noeud<E,A>* monceau, Noeud<E,A>* n)
+   Noeud<E,A>* couper(Noeud<E,A>* e, Noeud<E,A>* p)
    {
 	   // l'enfant n'a plus de parent il devient donc un noeud racine
-	   if(n->m_suivant==n)
+	   if(e->m_suivant==e)
 	   {
-		   n->m_parent->m_enfant = nullptr;
+		   p->m_enfant = nullptr;
 	   }
 	   else
 	   {
-		   n->m_suivant->m_precedent = n->m_precedent;
-		   n->m_precedent->m_suivant = n->m_suivant;
-		   n->m_parent->m_enfant = n->m_suivant;
+		   e->m_suivant->m_precedent = e->m_precedent;
+		   e->m_precedent->m_suivant = e->m_suivant;
+		   p->m_enfant = e->m_suivant;
 	   }
 
-	   n->m_suivant = n->m_precedent = n; // crée un tas d'un élément soit l'élément coupé
-	   n->m_parent = nullptr;
-	   n->m_marque = false;
-	   return unir(monceau,n); // on unie ce tas au monceau
+	   e->m_suivant = e->m_precedent = e; // crée un tas d'un élément soit l'élément coupé
+	   e->m_marque = false;
+	   e->m_parent = nullptr;
+	   return e;
    }
 };
 

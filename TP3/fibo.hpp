@@ -111,19 +111,26 @@ public:
 	 */
    void diminuer(Noeud<E,A>* p_noeud, E p_valeur)
    {
-	   if(p_noeud->m_valeur < p_valeur)
+	   // La valeur doit être plus petite que la valeur du noeud actuelle
+	   if(p_valeur > p_noeud->m_valeur)
 	   {
 		   return;
 	   }
 
 	   p_noeud->m_valeur = p_valeur;
-       if(p_noeud->m_parent == nullptr) return;
+	   // le noeud est une racine alors rien à faire
+       if(p_noeud->m_parent == nullptr)
+       {
+    	   return;
+       }
 
+       // On coupe le noeud de son père si la propriété du tas est violée
 	   if(p_noeud->m_valeur < p_noeud->m_parent->m_valeur)
 	   {
 		   monceau = couper(monceau,p_noeud);
 		   Noeud<E,A>* parent = p_noeud->m_parent;
 		   p_noeud->m_parent = nullptr;
+		   // si les parents sont marqués on les coupent aussi
 		   while(parent != nullptr && parent->m_marque)
 		   {
 			   monceau = couper(monceau,parent);
@@ -132,6 +139,7 @@ public:
 			   p_noeud->m_parent = nullptr;
 		   }
 
+		   // On marque le noeud parent si nécessaire
 		   if(parent != nullptr && parent->m_parent != nullptr)
 		   {
 			   parent->m_marque = true;
@@ -280,6 +288,7 @@ private:
 
    Noeud<E,A>* couper(Noeud<E,A>* monceau, Noeud<E,A>* n)
    {
+	   // l'enfant n'a plus de parent il devient donc un noeud racine
 	   if(n->m_suivant==n)
 	   {
 		   n->m_parent->m_enfant = nullptr;

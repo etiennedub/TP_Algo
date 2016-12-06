@@ -404,7 +404,7 @@ void testeComplexite(unsigned int nb_n){
 
 	}
 }
-void testeMonceauTous(unsigned int nb_n){
+void testeMonceau(unsigned int nb_n){
     // ajouter O(1)
     // supprimerMin O(log n)
     // diminuer O(1)

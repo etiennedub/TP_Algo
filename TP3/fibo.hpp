@@ -123,14 +123,12 @@ public:
 	   {
 		   monceau = couper(monceau,p_noeud);
 		   Noeud<E,A>* parent = p_noeud->m_parent;
-		   p_noeud->m_parent = nullptr;
 		   // si les parents sont marqués on les coupent aussi
 		   while(parent != nullptr && parent->m_marque)
 		   {
 			   monceau = couper(monceau,parent);
 			   p_noeud = parent;
 			   parent = p_noeud->m_parent;
-			   p_noeud->m_parent = nullptr;
 		   }
 
 		   // On marque le noeud parent si nécessaire
@@ -294,9 +292,10 @@ private:
 		   n->m_parent->m_enfant = n->m_suivant;
 	   }
 
-	   n->m_suivant = n->m_precedent = n;
+	   n->m_suivant = n->m_precedent = n; // crée un tas d'un élément soit l'élément coupé
+	   n->m_parent = nullptr;
 	   n->m_marque = false;
-	   return unir(monceau,n);
+	   return unir(monceau,n); // on unie ce tas au monceau
    }
 };
 

@@ -49,6 +49,7 @@ private:
 	std::string m_destination;
 	std::vector<Arret> m_arrets;
 	std::unordered_map<unsigned int, Arret*> m_arrets_par_station;
+
 };
 
 

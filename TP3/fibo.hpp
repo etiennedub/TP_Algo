@@ -35,7 +35,8 @@ public:
 	 */
     Fibo()
 	{
-    	monceau = nullptr;
+    	m_min = nullptr;
+    	m_size = 0;
 	}
 
     /**
@@ -44,18 +45,18 @@ public:
      */
    ~Fibo()
    {
-	   if (monceau != nullptr){
-	           supprimerTous(monceau);
+	   if (m_size != 0){
+	           supprimerTous(m_min);
 	       }
    }
 
    /**
-    * \brief Permet de savoir si le monceau est vide
-    * \return un bool dit dit si le monceau est vide
+    * \brief Permet de savoir si le m_min est vide
+    * \return un bool dit dit si le m_min est vide
     */
    bool estVide()
    {
-	   return monceau == nullptr;
+	   return m_size == 0;
    }
 
    /**
@@ -75,7 +76,8 @@ public:
 		ptr->m_marque = false;
 		ptr->m_id = p_id;
 		ptr->m_valeur = p_valeur;
-    	monceau = unir(monceau, ptr);
+    	m_min = unir(m_min, ptr);
+    	m_size++;
     	return ptr;
     }
 
@@ -85,8 +87,8 @@ public:
 	 */
     E supprimerMin()
     {
-    	Noeud<E,A>* n = monceau;
-    	monceau = extraireMin(monceau);
+    	Noeud<E,A>* n = m_min;
+    	m_min = extraireMin(m_min);
     	E val = n->m_valeur;
     	delete n;
     	return val;
@@ -94,7 +96,7 @@ public:
 
 	Noeud<E,A> * getMin()
 	{
-		return monceau;
+		return m_min;
 	};
 
     /**
@@ -123,14 +125,14 @@ public:
 	   if(p_noeud->m_valeur < parent->m_valeur)
 	   {
 		   Noeud<E,A>* n = couper(p_noeud,parent);
-		   monceau = unir(monceau,n);
+		   m_min = unir(m_min,n);
 		   // si les parents sont marqués on les coupent aussi
 		   while(parent != nullptr && parent->m_marque)
 		   {
 			   p_noeud = parent;
-			   Noeud<E,A>* parent = p_noeud->m_parent;
+			   parent = p_noeud->m_parent;
 			   n = couper(p_noeud,parent);
-			   monceau = unir(monceau,n);
+			   m_min = unir(m_min,n);
 		   }
 
 		   // On marque le noeud parent si nécessaire
@@ -142,7 +144,8 @@ public:
    }
 
 private:
-   Noeud<E,A>* monceau;
+   Noeud<E,A>* m_min;
+   unsigned int m_size;
 
    void supprimerTous(Noeud<E,A>* p_noeud)
    {
@@ -189,27 +192,22 @@ private:
 	   parent->m_enfant = unir(parent->m_enfant, enfant);
    }
 
-   void retirerMarquesEtParente(Noeud<E,A>* n)
-   {
-	   if(n == nullptr)
-	   {
-		   return;
-	   }
-	   else
-	   {
-		   Noeud<E,A>* temp = n;
-		   do{
-			   temp->m_marque = false;
-			   temp->m_parent = nullptr;
-			   temp = temp->m_suivant;
-		   }while(temp != n);
-	   }
-   }
-
    Noeud<E,A>* extraireMin(Noeud<E,A>* n)
    {
-	  retirerMarquesEtParente(n->m_enfant);
+	   // Si le noeud min a des enfants on retire leur parenté et leur marque
+	   if(n->m_enfant != nullptr)
+	   {
+		   Noeud<E,A>* temp = n->m_enfant;
+	   	   do{
+	   		   temp->m_marque = false;
+	   		   temp->m_parent = nullptr;
+	   		   temp = temp->m_suivant;
+	   		 }while(temp != n->m_enfant);
+	   }
 
+	   m_size--; // On réduit la taille de 1 puisqu'on retire 1 noeud
+
+	  // On affecte n à un nouveau noeud racine
 	  if(n->m_suivant == n)
 	  {
 		  n = n->m_enfant;
@@ -225,48 +223,56 @@ private:
 		  return n;
 	  }
 
-	  Noeud<E,A>* trees[64]={nullptr};
+	  // On veut avoir un arbre de chaque degré différent
+	  int tailleMax = ceil(log2(m_size)/log2(1.618))+1;
+	  Noeud<E,A>* arbres[tailleMax]={nullptr};
 	  while(true)
 	  {
-		  if(trees[n->m_degree]!=nullptr)
+		  // l'arbre de ce degré existe alors on lui ajoute un noeud
+		  if(arbres[n->m_degree]!=nullptr)
 		  {
-			  Noeud<E,A>* t=trees[n->m_degree];
-			  if(t==n)break;
-			  trees[n->m_degree]=nullptr;
-			  if(n->m_valeur<t->m_valeur)
+			  Noeud<E,A>* a=arbres[n->m_degree];
+			  if(a==n)
 			  {
-				  t->m_precedent->m_suivant=t->m_suivant;
-				  t->m_suivant->m_precedent=t->m_precedent;
-				  ajouterEnfant(n,t);
+				  break;
+			  }
+			  arbres[n->m_degree]=nullptr;
+			  if(n->m_valeur<a->m_valeur)
+			  {
+				  a->m_precedent->m_suivant=a->m_suivant;
+				  a->m_suivant->m_precedent=a->m_precedent;
+				  ajouterEnfant(n,a);
 			  }
 			  else
 			  {
-				  t->m_precedent->m_suivant=t->m_suivant;
-				  t->m_suivant->m_precedent=t->m_precedent;
+				  a->m_precedent->m_suivant=a->m_suivant;
+				  a->m_suivant->m_precedent=a->m_precedent;
 				  if(n->m_suivant==n)
 				  {
-					  t->m_suivant=t->m_precedent=t;
-					  ajouterEnfant(t,n);
-					  n=t;
+					  a->m_suivant=a->m_precedent=a;
+					  ajouterEnfant(a,n);
+					  n=a;
 				  }
 				  else
 				  {
-					  n->m_precedent->m_suivant=t;
-					  n->m_suivant->m_precedent=t;
-					  t->m_suivant=n->m_suivant;
-					  t->m_precedent=n->m_precedent;
-					  ajouterEnfant(t,n);
-					  n=t;
+					  n->m_precedent->m_suivant=a;
+					  n->m_suivant->m_precedent=a;
+					  a->m_suivant=n->m_suivant;
+					  a->m_precedent=n->m_precedent;
+					  ajouterEnfant(a,n);
+					  n=a;
 				  }
 			  }
 			  continue;
 		  }
 		  else
 		  {
-			  trees[n->m_degree]=n;
+			  // on crée un nouvel arbre à partir du noeud racine
+			  arbres[n->m_degree]=n;
 		  }
 		  n=n->m_suivant;
 	  }
+	  // On évalue le minimum parmi les noeuds racines
 	  Noeud<E,A>* min=n;
 	  do
 	  {
@@ -297,6 +303,7 @@ private:
 	   e->m_suivant = e->m_precedent = e; // crée un tas d'un élément soit l'élément coupé
 	   e->m_marque = false;
 	   e->m_parent = nullptr;
+	   p->m_degree--;
 	   return e;
    }
 };

@@ -24,10 +24,9 @@ const double distance_max_transfert = 0.2; // Cette distance est relativement co
 
 enum class MoyenDeplacement {BUS=0, PIEDS};
 
-void testeMonceau(unsigned int nb_teste);
-void testeMonceauSupprimerMin(unsigned int nb_n);
+void testMonceau(unsigned int nb_teste);
 Reseau reseauAleatoire(unsigned int nb_n);
-void testeComplexite(unsigned int nb_n);
+void testComplexite(unsigned int nb_n);
 
 /*!
  * \class Gestionnaire

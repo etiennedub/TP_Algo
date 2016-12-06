@@ -180,7 +180,6 @@ double GestionnaireInvestigation::tester_n_paires_dijsktra(unsigned int nb_paire
 		std::vector<unsigned int> chemin;
         int numStart = v[j];
         int numStop = v[k];
-        std::cout << "Depart : " << v[j] << " | Arrive : " << v[k] << std::endl;
 		m_reseau.dijkstra(numStart, numStop, chemin);
 
 		if (gettimeofday(&tv2, 0) != 0)
@@ -219,7 +218,6 @@ double GestionnaireInvestigation::tester_n_paires_bellman(unsigned int nb_paires
 				throw std::logic_error("gettimeofday() a échoué");
 
 		std::vector<unsigned int> chemin;
-        std::cout << "Depart : " << v[j] << " | Arrive : " << v[k] << std::endl;
 		m_reseau.bellmanFord(v[j], v[k], chemin);
 
 		if (gettimeofday(&tv2, 0) != 0)
@@ -258,7 +256,6 @@ double GestionnaireInvestigation::tester_n_paires_best(unsigned int nb_paires, u
         std::vector<unsigned int> chemin;
         int numStart = v[j];
         int numStop = v[k];
-        std::cout << "Depart : " << numStart << " | Arrive : " << numStop << std::endl;
         m_reseau.meilleurPlusCourtChemin(numStart, numStop, chemin);
 
         if (gettimeofday(&tv2, 0) != 0)
@@ -342,6 +339,11 @@ void GestionnaireInvestigation::ajouter_aretes_transfert(double dist_transfert)
 	}
 }
 
+/*!
+ * \brief Génère un reseau aléatoire avec le même nombre d'arc moyen que celui du RTC
+ * \param nb_n nombre de sommets
+ * \return object de type Reseau
+ */
 Reseau reseauAleatoire(int nb_n){
     int arcMoyen = 4;
 	int sommetDest = 0;
@@ -366,11 +368,15 @@ Reseau reseauAleatoire(int nb_n){
 	return reseauTeste;
 }
 
-void testeComplexite(unsigned int nb_n){
+/*!
+ * \brief Fonction pour tester le temps de chaque algo et affiche le resultat sous forme CSV
+ * \param nb_n nombre maximal sommet
+ */
+void testComplexite(unsigned int nb_n){
 	srand (42);
 	std::cout << "n, meilleur, bellman, dijkstra" << std::endl;
 	std::vector<unsigned int> chemin;
-	for (int n = 1; n <= nb_n; n++){
+	for (int n = 1; n <= nb_n; n+=50){
 		Reseau reseauTempo = reseauAleatoire(n);
 		int depart = rand() % n;
 		int destination = rand() % n;
@@ -404,7 +410,11 @@ void testeComplexite(unsigned int nb_n){
 
 	}
 }
-void testeMonceauTous(unsigned int nb_n){
+/*!
+ * \brief Fonction pour tester le temps de chaque focntion du monceau de Fibonnacii et affiche le resultat sous forme CSV
+ * \param nb_n nombre maximal noeaud
+ */
+void testMonceau(unsigned int nb_n){
     // ajouter O(1)
     // supprimerMin O(log n)
     // diminuer O(1)
@@ -412,7 +422,7 @@ void testeMonceauTous(unsigned int nb_n){
     srand (42);
     int nombre = 0;
     std::cout << "n, ajouter(), supprimerMin(), diminuer(), getMin()" << std::endl;
-    for (int n = 1; n < nb_n; n++) {
+    for (int n = 1; n < nb_n; n+=20) {
         Noeud<int, int> *ptr;
         int ptrRand = rand() % n;
         Fibo<int, int> monceau;
@@ -424,7 +434,6 @@ void testeMonceauTous(unsigned int nb_n){
                 monceau.ajouter(1, nombre);
             }
         }
-
         timeval init_ajouter, finale_ajouter;
         nombre = rand() % 1000;
         if (gettimeofday(&init_ajouter, 0) != 0)
@@ -461,30 +470,5 @@ void testeMonceauTous(unsigned int nb_n){
 
         std::cout << n << "," << tempsAjouter << "," << tempsSupprimer << "," << tempsDiminuer << "," <<
                            tempsGetMin << std::endl;
-    }
-}
-
-
-
-void testeMonceauSupprimerMin(unsigned int nb_n) {
-    // supprimerMin O(log n)
-    srand(42);
-    int nombre = 0;
-    std::cout << "n, ajouter(), supprimerMin(), diminuer(), getMin()" << std::endl;
-    Fibo<int, int> monceau;
-    timeval init_supprimer, finale_supprimer;
-    for (int n = 1; n < nb_n; n++) {
-        nombre = rand() % 1000000;
-        monceau.ajouter(1, nombre);
-        if (gettimeofday(&init_supprimer, 0) != 0)
-            throw std::logic_error("gettimeofday() a échoué");
-        monceau.supprimerMin();
-        if (gettimeofday(&finale_supprimer, 0) != 0)
-            throw std::logic_error("gettimeofday() a échoué");
-        long tempsSupprimer = tempsExecution(init_supprimer, finale_supprimer);
-        nombre = rand() % 1000000;
-        monceau.ajouter(1, nombre);
-
-        std::cout << n << "," << tempsSupprimer << std::endl;
     }
 }

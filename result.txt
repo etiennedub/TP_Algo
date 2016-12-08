@@ -1,0 +1,83 @@
+Chargement des données terminé en 11.1396 secondes
+Initialisation du réseau ....
+Chargement des données terminé en 4.59789 secondes
+0
+Temps moyen de dijsktra 1.50444e+06
+Temps moyen de bellman 510628
+Temps moyen de meilleur 8151.28
+1
+Temps moyen de dijsktra 1.50409e+06
+Temps moyen de bellman 510545
+Temps moyen de meilleur 8091.91
+2
+Temps moyen de dijsktra 1.50409e+06
+Temps moyen de bellman 510287
+Temps moyen de meilleur 8028.35
+3
+Temps moyen de dijsktra 1.50332e+06
+Temps moyen de bellman 510380
+Temps moyen de meilleur 7968.35
+4
+Temps moyen de dijsktra 1.50296e+06
+Temps moyen de bellman 510130
+Temps moyen de meilleur 7999.09
+5
+Temps moyen de dijsktra 1.50301e+06
+Temps moyen de bellman 510262
+Temps moyen de meilleur 7972.68
+6
+Temps moyen de dijsktra 1.50313e+06
+Temps moyen de bellman 510189
+Temps moyen de meilleur 8001.38
+7
+Temps moyen de dijsktra 1.50326e+06
+Temps moyen de bellman 510265
+Temps moyen de meilleur 8039.46
+8
+Temps moyen de dijsktra 1.50335e+06
+Temps moyen de bellman 510846
+Temps moyen de meilleur 8172.51
+9
+Temps moyen de dijsktra 1.50446e+06
+Temps moyen de bellman 510681
+Temps moyen de meilleur 8183.97
+10
+Temps moyen de dijsktra 1.52315e+06
+Temps moyen de bellman 510851
+Temps moyen de meilleur 8187.1
+11
+Temps moyen de dijsktra 1.50433e+06
+Temps moyen de bellman 510987
+Temps moyen de meilleur 8185.28
+12
+Temps moyen de dijsktra 1.50431e+06
+Temps moyen de bellman 522545
+Temps moyen de meilleur 8504.96
+13
+Temps moyen de dijsktra 1.50601e+06
+Temps moyen de bellman 550996
+Temps moyen de meilleur 8375.43
+14
+Temps moyen de dijsktra 1.50653e+06
+Temps moyen de bellman 547965
+Temps moyen de meilleur 8818.7
+15
+Temps moyen de dijsktra 1.50554e+06
+Temps moyen de bellman 511453
+Temps moyen de meilleur 8235.99
+16
+Temps moyen de dijsktra 1.50499e+06
+Temps moyen de bellman 511033
+Temps moyen de meilleur 8211.22
+17
+Temps moyen de dijsktra 1.50514e+06
+Temps moyen de bellman 511680
+Temps moyen de meilleur 8254.06
+18
+Temps moyen de dijsktra 1.50502e+06
+Temps moyen de bellman 512488
+Temps moyen de meilleur 8232.27
+19
+Temps moyen de dijsktra 1.50501e+06
+Temps moyen de bellman 510230
+Temps moyen de meilleur 8056.84
